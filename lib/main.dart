@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'generated/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
 import 'dart:convert';
@@ -34,6 +36,16 @@ class ProteinTrackerApp extends StatelessWidget {
     return MaterialApp(
       title: 'Protein Tracker',
       debugShowCheckedModeBanner: false,
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('en'), // English
+        Locale('de'), // German
+      ],
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: AppColors.lightColorScheme,
@@ -63,18 +75,18 @@ class ProteinEntry {
   });
 
   Map<String, dynamic> toJson() => {
-    'date': date,
-    'amount': amount,
-    'source': source,
-    'timestamp': timestamp.toIso8601String(),
-  };
+        'date': date,
+        'amount': amount,
+        'source': source,
+        'timestamp': timestamp.toIso8601String(),
+      };
 
   factory ProteinEntry.fromJson(Map<String, dynamic> json) => ProteinEntry(
-    date: json['date'],
-    amount: json['amount'].toDouble(),
-    source: json['source'],
-    timestamp: DateTime.parse(json['timestamp']),
-  );
+        date: json['date'],
+        amount: json['amount'].toDouble(),
+        source: json['source'],
+        timestamp: DateTime.parse(json['timestamp']),
+      );
 }
 
 class HomePage extends StatefulWidget {
@@ -129,9 +141,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   Future<void> _saveData() async {
     final prefs = await SharedPreferences.getInstance();
-    final entriesJson = _proteinEntries
-        .map((e) => json.encode(e.toJson()))
-        .toList();
+    final entriesJson =
+        _proteinEntries.map((e) => json.encode(e.toJson())).toList();
     await prefs.setStringList('protein_entries', entriesJson);
     await prefs.setDouble('daily_goal', _dailyGoal);
   }
@@ -210,12 +221,14 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
-        title: const Text(
-          'Protein Tracker',
-          style: TextStyle(fontWeight: FontWeight.w600),
+        title: Text(
+          l10n.appTitle,
+          style: const TextStyle(fontWeight: FontWeight.w600),
         ),
         backgroundColor: Colors.transparent,
         actions: [
@@ -231,7 +244,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Progress Card
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(24),
@@ -253,7 +265,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               child: Column(
                 children: [
                   Text(
-                    'Today\'s Progress',
+                    l10n.todayProgress,
                     style: TextStyle(
                       color: Colors.white.withOpacity(0.9),
                       fontSize: 16,
@@ -288,7 +300,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                 ),
                               ),
                               Text(
-                                'of ${_dailyGoal.toInt()}g',
+                                '${l10n.progressOf} ${_dailyGoal.toInt()}g',
                                 style: TextStyle(
                                   color: Colors.white.withOpacity(0.8),
                                   fontSize: 14,
@@ -302,7 +314,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    '${(_progressPercentage * 100).toInt()}% Complete',
+                    '${(_progressPercentage * 100).toInt()}% ${l10n.complete}',
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 18,
@@ -312,16 +324,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 ],
               ),
             ),
-
             const SizedBox(height: 32),
-
-            // Today's Entries
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
-                  'Today\'s Entries',
-                  style: TextStyle(
+                Text(
+                  l10n.todayEntries,
+                  style: const TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
                     color: Colors.black87,
@@ -330,16 +339,14 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 TextButton.icon(
                   onPressed: _addProteinEntry,
                   icon: const Icon(Icons.add),
-                  label: const Text('Add'),
+                  label: Text(l10n.add),
                   style: TextButton.styleFrom(
                     foregroundColor: AppColors.primary,
                   ),
                 ),
               ],
             ),
-
             const SizedBox(height: 16),
-
             if (_todayEntries.isEmpty)
               Container(
                 width: double.infinity,
@@ -364,7 +371,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      'No entries today',
+                      l10n.noEntriesToday,
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
@@ -373,7 +380,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Start tracking your protein intake',
+                      l10n.startTracking,
                       style: TextStyle(fontSize: 14, color: Colors.grey[500]),
                     ),
                   ],
@@ -447,7 +454,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _addProteinEntry,
         icon: const Icon(Icons.add),
-        label: const Text('Add Protein'),
+        label: Text(l10n.addProtein),
         backgroundColor: AppColors.primary,
         foregroundColor: Colors.white,
         elevation: 8,
@@ -532,6 +539,8 @@ class _AddProteinModalState extends State<AddProteinModal> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Container(
       padding: EdgeInsets.only(
         bottom: MediaQuery.of(context).viewInsets.bottom,
@@ -549,9 +558,10 @@ class _AddProteinModalState extends State<AddProteinModal> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
-                  'Add Protein',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                Text(
+                  l10n.addProtein,
+                  style: const TextStyle(
+                      fontSize: 24, fontWeight: FontWeight.bold),
                 ),
                 IconButton(
                   onPressed: () => Navigator.pop(context),
@@ -559,20 +569,16 @@ class _AddProteinModalState extends State<AddProteinModal> {
                 ),
               ],
             ),
-
             const SizedBox(height: 24),
-
-            // Quick select common sources
-            const Text(
-              'Quick Select',
-              style: TextStyle(
+            Text(
+              l10n.quickSelect,
+              style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
                 color: Colors.black87,
               ),
             ),
             const SizedBox(height: 12),
-
             Wrap(
               spacing: 8,
               runSpacing: 8,
@@ -605,29 +611,25 @@ class _AddProteinModalState extends State<AddProteinModal> {
                   )
                   .toList(),
             ),
-
             const SizedBox(height: 24),
-
             TextField(
               controller: _sourceController,
               decoration: InputDecoration(
-                labelText: 'Protein Source',
-                hintText: 'e.g., Chicken breast, Protein shake',
+                labelText: l10n.proteinSource,
+                hintText: l10n.proteinSourceHint,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
                 prefixIcon: const Icon(Icons.restaurant_menu),
               ),
             ),
-
             const SizedBox(height: 16),
-
             TextField(
               controller: _amountController,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
-                labelText: 'Protein Amount (g)',
-                hintText: 'Enter grams of protein',
+                labelText: l10n.proteinAmount,
+                hintText: l10n.proteinAmountHint,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -635,9 +637,7 @@ class _AddProteinModalState extends State<AddProteinModal> {
                 suffixText: 'g',
               ),
             ),
-
             const SizedBox(height: 24),
-
             SizedBox(
               width: double.infinity,
               height: 50,
@@ -658,13 +658,13 @@ class _AddProteinModalState extends State<AddProteinModal> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                child: const Text(
-                  'Add Entry',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                child: Text(
+                  l10n.addEntry,
+                  style: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.w600),
                 ),
               ),
             ),
-
             const SizedBox(height: 8),
           ],
         ),
@@ -700,13 +700,15 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return AlertDialog(
-      title: const Text('Set Daily Goal'),
+      title: Text(l10n.setDailyGoal),
       content: TextField(
         controller: _controller,
         keyboardType: TextInputType.number,
         decoration: InputDecoration(
-          labelText: 'Daily Protein Goal (g)',
+          labelText: l10n.dailyProteinGoal,
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
           suffixText: 'g',
         ),
@@ -714,7 +716,7 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text('Cancel'),
+          child: Text(l10n.cancel),
         ),
         ElevatedButton(
           onPressed: () {
@@ -724,7 +726,7 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
               Navigator.pop(context);
             }
           },
-          child: const Text('Set Goal'),
+          child: Text(l10n.setGoal),
         ),
       ],
     );
@@ -746,19 +748,20 @@ class HistoryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final sortedDates = _dailyTotals.keys.toList()
       ..sort((a, b) => b.compareTo(a));
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('History'),
+        title: Text(l10n.history),
         backgroundColor: Colors.transparent,
       ),
       body: sortedDates.isEmpty
-          ? const Center(
+          ? Center(
               child: Text(
-                'No history yet',
-                style: TextStyle(fontSize: 18, color: Colors.grey),
+                l10n.noHistory,
+                style: const TextStyle(fontSize: 18, color: Colors.grey),
               ),
             )
           : ListView.builder(
@@ -776,7 +779,7 @@ class HistoryPage extends StatelessWidget {
                   child: ListTile(
                     title: Text(
                       isToday
-                          ? 'Today'
+                          ? l10n.today
                           : DateFormat('EEEE, MMM d').format(dateObj),
                       style: const TextStyle(fontWeight: FontWeight.w600),
                     ),
