@@ -3,6 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'generated/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'dart:convert';
 import 'dart:math' as math;
 
@@ -42,6 +43,7 @@ class _ProteinTrackerAppState extends State<ProteinTrackerApp> {
   void initState() {
     super.initState();
     _loadLocale();
+    _loadColor();
   }
 
   Future<void> _loadLocale() async {
@@ -50,6 +52,16 @@ class _ProteinTrackerAppState extends State<ProteinTrackerApp> {
     if (localeCode != null) {
       setState(() {
         _locale = Locale(localeCode);
+      });
+    }
+  }
+
+  Future<void> _loadColor() async {
+    final prefs = await SharedPreferences.getInstance();
+    final colorValue = prefs.getInt('primary_color');
+    if (colorValue != null) {
+      setState(() {
+        AppColors.primary = Color(colorValue);
       });
     }
   }
@@ -63,6 +75,14 @@ class _ProteinTrackerAppState extends State<ProteinTrackerApp> {
     }
     setState(() {
       _locale = locale;
+    });
+  }
+
+  Future<void> setColor(Color color) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('primary_color', color.value);
+    setState(() {
+      AppColors.primary = color;
     });
   }
 
@@ -92,7 +112,10 @@ class _ProteinTrackerAppState extends State<ProteinTrackerApp> {
           scrolledUnderElevation: 0,
         ),
       ),
-      home: HomePage(onLocaleChanged: setLocale, currentLocale: _locale),
+      home: HomePage(
+          onLocaleChanged: setLocale,
+          onColorChanged: setColor,
+          currentLocale: _locale),
     );
   }
 }
@@ -127,10 +150,15 @@ class ProteinEntry {
 
 class HomePage extends StatefulWidget {
   final Function(Locale?) onLocaleChanged;
+  final Function(Color) onColorChanged;
   final Locale? currentLocale;
 
-  const HomePage(
-      {super.key, required this.onLocaleChanged, required this.currentLocale});
+  const HomePage({
+    super.key,
+    required this.onLocaleChanged,
+    required this.onColorChanged,
+    required this.currentLocale,
+  });
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -247,6 +275,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           _saveData();
         },
         onLocaleChanged: widget.onLocaleChanged,
+        onColorChanged: widget.onColorChanged,
         currentLocale: widget.currentLocale,
       ),
     );
@@ -340,7 +369,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       child: Center(
                         child: Text(
                           '${entry.amount}g',
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: AppColors.primary,
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
@@ -648,7 +677,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                           borderRadius:
                                               BorderRadius.circular(8),
                                         ),
-                                        child: const Icon(
+                                        child: Icon(
                                           Icons.edit,
                                           color: AppColors.primary,
                                         ),
@@ -750,7 +779,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                 ),
                                 Text(
                                   '${entry.amount}g',
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 18,
                                     color: AppColors.primary,
@@ -962,7 +991,7 @@ class _AddProteinModalState extends State<AddProteinModal> {
                           ),
                           child: Text(
                             '${source['name']} (${source['protein']}g)',
-                            style: const TextStyle(
+                            style: TextStyle(
                               color: AppColors.primary,
                               fontWeight: FontWeight.w500,
                             ),
@@ -1042,6 +1071,7 @@ class SetGoalDialog extends StatefulWidget {
   final double currentGoal;
   final Function(double) onSet;
   final Function(Locale?) onLocaleChanged;
+  final Function(Color) onColorChanged;
   final Locale? currentLocale;
 
   const SetGoalDialog({
@@ -1049,6 +1079,7 @@ class SetGoalDialog extends StatefulWidget {
     required this.currentGoal,
     required this.onSet,
     required this.onLocaleChanged,
+    required this.onColorChanged,
     required this.currentLocale,
   });
 
@@ -1059,6 +1090,7 @@ class SetGoalDialog extends StatefulWidget {
 class _SetGoalDialogState extends State<SetGoalDialog> {
   late TextEditingController _controller;
   late String _selectedLanguage;
+  Color _selectedColor = AppColors.primary;
 
   @override
   void initState() {
@@ -1067,6 +1099,38 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
       text: widget.currentGoal.toInt().toString(),
     );
     _selectedLanguage = widget.currentLocale?.languageCode ?? 'system';
+    _selectedColor = AppColors.primary;
+  }
+
+  void _showColorPicker() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Pick a color'),
+        content: SingleChildScrollView(
+          child: ColorPicker(
+            pickerColor: _selectedColor,
+            onColorChanged: (color) {
+              setState(() {
+                _selectedColor = color;
+              });
+              widget.onColorChanged(color);
+            },
+            pickerAreaHeightPercent: 0.8,
+            enableAlpha: false,
+            labelTypes: const [],
+            displayThumbColor: true,
+            showLabel: false,
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Done'),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -1118,6 +1182,48 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
                 ),
                 prefixIcon: const Icon(Icons.fitness_center),
                 suffixText: 'g',
+              ),
+            ),
+            const SizedBox(height: 24),
+            Text(
+              'App Color',
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: Colors.black87,
+              ),
+            ),
+            const SizedBox(height: 12),
+            GestureDetector(
+              onTap: _showColorPicker,
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.grey[50],
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: Colors.grey[300]!),
+                ),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: _selectedColor,
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.grey[300]!),
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    const Text(
+                      'Tap to change color',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.black87,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
             const SizedBox(height: 24),
@@ -1276,7 +1382,7 @@ class HistoryPage extends StatelessWidget {
                     subtitle: Text(DateFormat('yyyy-MM-dd').format(dateObj)),
                     trailing: Text(
                       '${total.toInt()}g',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                         color: AppColors.primary,

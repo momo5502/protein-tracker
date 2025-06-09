@@ -283,6 +283,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Entry'**
   String get entry;
+
+  /// No description provided for @appColor.
+  ///
+  /// In en, this message translates to:
+  /// **'App Color'**
+  String get appColor;
+
+  /// No description provided for @selectColor.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a color'**
+  String get selectColor;
 }
 
 class _AppLocalizationsDelegate

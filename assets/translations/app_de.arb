@@ -29,5 +29,7 @@
     "deleteEntry": "Eintrag löschen",
     "deleteConfirmation": "Möchten Sie diesen Eintrag wirklich löschen?",
     "recentEntries": "Letzte Einträge",
-    "entry": "Eintrag"
+    "entry": "Eintrag",
+    "appColor": "App-Farbe",
+    "selectColor": "Farbe auswählen"
 } 

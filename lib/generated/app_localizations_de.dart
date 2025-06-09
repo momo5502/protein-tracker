@@ -102,4 +102,10 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get entry => 'Eintrag';
+
+  @override
+  String get appColor => 'App-Farbe';
+
+  @override
+  String get selectColor => 'Farbe auswählen';
 }

@@ -101,4 +101,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get entry => 'Entry';
+
+  @override
+  String get appColor => 'App Color';
+
+  @override
+  String get selectColor => 'Select a color';
 }
