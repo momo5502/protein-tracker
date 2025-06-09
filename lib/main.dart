@@ -1223,18 +1223,56 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
   Color _selectedColor = AppColors.primary;
   ThemeMode _selectedThemeMode = ThemeMode.system;
 
+  // Store original values
+  late double _originalGoal;
+  late String _originalLanguage;
+  late Color _originalColor;
+  late ThemeMode _originalThemeMode;
+
   @override
   void initState() {
     super.initState();
+    _originalGoal = widget.currentGoal;
+    _originalLanguage = widget.currentLocale?.languageCode ?? 'system';
+    _originalColor = AppColors.primary;
+    _originalThemeMode = widget.currentThemeMode;
+
     _controller = TextEditingController(
       text: widget.currentGoal.toInt().toString(),
     );
-    _selectedLanguage = widget.currentLocale?.languageCode ?? 'system';
-    _selectedColor = AppColors.primary;
-    _selectedThemeMode = widget.currentThemeMode;
+    _selectedLanguage = _originalLanguage;
+    _selectedColor = _originalColor;
+    _selectedThemeMode = _originalThemeMode;
+  }
+
+  void _cancelChanges() {
+    // Revert all changes
+    setState(() {
+      _selectedLanguage = _originalLanguage;
+      _selectedColor = _originalColor;
+      _selectedThemeMode = _originalThemeMode;
+    });
+
+    // Revert color
+    widget.onColorChanged(_originalColor);
+
+    // Revert language
+    if (_originalLanguage == 'system') {
+      widget.onLocaleChanged(null);
+    } else {
+      widget.onLocaleChanged(Locale(_originalLanguage));
+    }
+
+    // Revert theme
+    widget.onThemeModeChanged(_originalThemeMode);
+
+    Navigator.pop(context);
   }
 
   void _showColorPicker() {
+    Color tempColor = _selectedColor;
+    Color originalColor = _selectedColor;
+
     showDialog(
       context: context,
       builder: (context) => Dialog(
@@ -1258,17 +1296,23 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
                     ),
                   ),
                   IconButton(
-                    onPressed: () => Navigator.pop(context),
+                    onPressed: () {
+                      setState(() {
+                        _selectedColor = originalColor;
+                      });
+                      widget.onColorChanged(originalColor);
+                      Navigator.pop(context);
+                    },
                     icon: const Icon(Icons.close),
                   ),
                 ],
               ),
               const SizedBox(height: 24),
               ColorPicker(
-                pickerColor: _selectedColor,
+                pickerColor: tempColor,
                 onColorChanged: (color) {
                   setState(() {
-                    _selectedColor = color;
+                    tempColor = color;
                   });
                   widget.onColorChanged(color);
                 },
@@ -1282,7 +1326,13 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
                 children: [
                   Expanded(
                     child: TextButton(
-                      onPressed: () => Navigator.pop(context),
+                      onPressed: () {
+                        setState(() {
+                          _selectedColor = originalColor;
+                        });
+                        widget.onColorChanged(originalColor);
+                        Navigator.pop(context);
+                      },
                       style: TextButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(
@@ -1301,7 +1351,13 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
                   const SizedBox(width: 16),
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: () => Navigator.pop(context),
+                      onPressed: () {
+                        setState(() {
+                          _selectedColor = tempColor;
+                        });
+                        widget.onColorChanged(tempColor);
+                        Navigator.pop(context);
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary,
                         foregroundColor: Colors.white,
@@ -1359,7 +1415,7 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
                   ),
                 ),
                 IconButton(
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: _cancelChanges,
                   icon: Icon(Icons.close, color: colorScheme.onSurface),
                 ),
               ],
@@ -1564,7 +1620,7 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
               children: [
                 Expanded(
                   child: TextButton(
-                    onPressed: () => Navigator.pop(context),
+                    onPressed: _cancelChanges,
                     style: TextButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
