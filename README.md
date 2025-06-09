@@ -2,7 +2,7 @@
 
 A modern, user-friendly Flutter application for tracking daily protein intake. Built with Material Design 3 and supporting multiple languages.
 
-![Protein Tracker](https://raw.githubusercontent.com/yourusername/protein_tracker/main/screenshots/app_preview.png)
+![Protein Tracker](https://raw.githubusercontent.com/momo5502/protein-tracker/main/screenshots/app_preview.png)
 
 ## Features
 
@@ -35,21 +35,25 @@ A modern, user-friendly Flutter application for tracking daily protein intake. B
 ### Installation
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/yourusername/protein_tracker.git
 ```
 
 2. Navigate to the project directory:
+
 ```bash
 cd protein_tracker
 ```
 
 3. Install dependencies:
+
 ```bash
 flutter pub get
 ```
 
 4. Run the app:
+
 ```bash
 flutter run
 ```
@@ -57,17 +61,20 @@ flutter run
 ## Usage
 
 ### Adding Protein Entries
+
 - Tap the "+" button to add a new protein entry
 - Enter the protein source (optional)
 - Enter the protein amount in grams
 - Tap "Add Entry" to save
 
 ### Managing Entries
+
 - Long press any entry to edit or delete
 - View your daily progress in the circular indicator
 - Access your history through the history icon in the app bar
 
 ### Settings
+
 - Access settings through the gear icon in the app bar
 - Adjust your daily protein goal
 - Change the app's color theme
@@ -76,6 +83,7 @@ flutter run
 ## Development
 
 ### Project Structure
+
 ```
 lib/
   ├── main.dart           # Main application file
@@ -90,11 +98,13 @@ lib/
 ### Building for Production
 
 To build the release APK:
+
 ```bash
 flutter build apk --release
 ```
 
 The APK will be located at:
+
 ```
 build/app/outputs/flutter-apk/app-release.apk
 ```

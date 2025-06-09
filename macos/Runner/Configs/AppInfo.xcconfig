@@ -8,7 +8,7 @@
 PRODUCT_NAME = protein_tracker
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.example.proteinTracker
+PRODUCT_BUNDLE_IDENTIFIER = com.momo5502.tracker
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2025 com.example. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2025 momo5502. All rights reserved.
