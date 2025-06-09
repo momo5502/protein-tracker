@@ -205,9 +205,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   Color get _progressColor {
-    final percentage = _progressPercentage;
+    /*final percentage = _progressPercentage;
     if (percentage >= 1.0) return Colors.green;
-    if (percentage >= 0.8) return Colors.orange;
+    if (percentage >= 0.8) return Colors.orange;*/
     return AppColors.primary;
   }
 
