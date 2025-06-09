@@ -99,7 +99,7 @@ class _ProteinTrackerAppState extends State<ProteinTrackerApp> {
 
 class ProteinEntry {
   final String date;
-  final double amount;
+  final int amount;
   final String source;
   final DateTime timestamp;
 
@@ -119,7 +119,7 @@ class ProteinEntry {
 
   factory ProteinEntry.fromJson(Map<String, dynamic> json) => ProteinEntry(
         date: json['date'],
-        amount: json['amount'].toDouble(),
+        amount: json['amount'].toInt(),
         source: json['source'],
         timestamp: DateTime.parse(json['timestamp']),
       );
@@ -220,7 +220,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         onAdd: (amount, source) {
           final entry = ProteinEntry(
             date: DateFormat('yyyy-MM-dd').format(DateTime.now()),
-            amount: amount,
+            amount: amount.toInt(),
             source: source,
             timestamp: DateTime.now(),
           );
@@ -267,7 +267,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (context) => AddProteinModal(
-        initialAmount: entry.amount,
+        initialAmount: entry.amount.toDouble(),
         initialSource: entry.source,
         onAdd: (amount, source) {
           setState(() {
@@ -276,7 +276,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             if (index != -1) {
               _proteinEntries[index] = ProteinEntry(
                 date: entry.date,
-                amount: amount,
+                amount: amount.toInt(),
                 source: source,
                 timestamp: entry.timestamp,
               );
@@ -665,27 +665,54 @@ class AddProteinModal extends StatefulWidget {
 class _AddProteinModalState extends State<AddProteinModal> {
   final _amountController = TextEditingController();
   final _sourceController = TextEditingController();
-
-  final List<Map<String, dynamic>> _commonSources = [
-    {'name': 'Chicken Breast', 'protein': 31},
-    {'name': 'Salmon', 'protein': 25},
-    {'name': 'Greek Yogurt', 'protein': 20},
-    {'name': 'Eggs', 'protein': 13},
-    {'name': 'Protein Shake', 'protein': 25},
-    {'name': 'Tofu', 'protein': 17},
-    {'name': 'Quinoa', 'protein': 14},
-    {'name': 'Almonds', 'protein': 21},
-  ];
+  List<Map<String, dynamic>> _customSources = [];
 
   @override
   void initState() {
     super.initState();
     if (widget.initialAmount != null) {
-      _amountController.text = widget.initialAmount!.toString();
+      _amountController.text = widget.initialAmount!.toInt().toString();
     }
     if (widget.initialSource != null) {
       _sourceController.text = widget.initialSource!;
     }
+    _loadCustomSources();
+  }
+
+  Future<void> _loadCustomSources() async {
+    final prefs = await SharedPreferences.getInstance();
+    final customSourcesJson = prefs.getStringList('custom_sources') ?? [];
+    setState(() {
+      _customSources = customSourcesJson.map((json) {
+        final Map<String, dynamic> source = jsonDecode(json);
+        // Ensure protein is stored as an integer
+        source['protein'] = (source['protein'] as num).toInt();
+        return source;
+      }).toList();
+    });
+  }
+
+  Future<void> _saveCustomSource(String name, int protein) async {
+    final prefs = await SharedPreferences.getInstance();
+    final newSource = {'name': name, 'protein': protein};
+
+    // Remove if already exists to avoid duplicates
+    _customSources.removeWhere((source) => source['name'] == name);
+
+    // Add to the beginning of the list
+    _customSources.insert(0, newSource);
+
+    // Keep only the last 5 custom entries
+    if (_customSources.length > 5) {
+      _customSources = _customSources.sublist(0, 5);
+    }
+
+    // Save to SharedPreferences
+    final customSourcesJson =
+        _customSources.map((source) => jsonEncode(source)).toList();
+    await prefs.setStringList('custom_sources', customSourcesJson);
+
+    setState(() {});
   }
 
   @override
@@ -721,48 +748,50 @@ class _AddProteinModalState extends State<AddProteinModal> {
               ],
             ),
             const SizedBox(height: 24),
-            Text(
-              l10n.quickSelect,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: Colors.black87,
+            if (_customSources.isNotEmpty) ...[
+              Text(
+                l10n.recentEntries,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black87,
+                ),
               ),
-            ),
-            const SizedBox(height: 12),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: _commonSources
-                  .map(
-                    (source) => GestureDetector(
-                      onTap: () {
-                        _sourceController.text = source['name'];
-                        _amountController.text = source['protein'].toString();
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 8,
-                        ),
-                        decoration: BoxDecoration(
-                          color: AppColors.primaryLight,
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: AppColors.primaryMedium),
-                        ),
-                        child: Text(
-                          '${source['name']} (${source['protein']}g)',
-                          style: const TextStyle(
-                            color: AppColors.primary,
-                            fontWeight: FontWeight.w500,
+              const SizedBox(height: 12),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: _customSources
+                    .map(
+                      (source) => GestureDetector(
+                        onTap: () {
+                          _sourceController.text = source['name'];
+                          _amountController.text = source['protein'].toString();
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 8,
+                          ),
+                          decoration: BoxDecoration(
+                            color: AppColors.primaryLight,
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(color: AppColors.primaryMedium),
+                          ),
+                          child: Text(
+                            '${source['name']} (${source['protein']}g)',
+                            style: const TextStyle(
+                              color: AppColors.primary,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  )
-                  .toList(),
-            ),
-            const SizedBox(height: 24),
+                    )
+                    .toList(),
+              ),
+              const SizedBox(height: 24),
+            ],
             TextField(
               controller: _sourceController,
               decoration: InputDecoration(
@@ -794,11 +823,12 @@ class _AddProteinModalState extends State<AddProteinModal> {
               height: 50,
               child: ElevatedButton(
                 onPressed: () {
-                  final amount = double.tryParse(_amountController.text);
+                  final amount = int.tryParse(_amountController.text);
                   final source = _sourceController.text.trim();
 
                   if (amount != null && amount > 0 && source.isNotEmpty) {
-                    widget.onAdd(amount, source);
+                    _saveCustomSource(source, amount);
+                    widget.onAdd(amount.toDouble(), source);
                     Navigator.pop(context);
                   }
                 },

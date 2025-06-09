@@ -27,5 +27,6 @@
     "delete": "Löschen",
     "editEntry": "Eintrag bearbeiten",
     "deleteEntry": "Eintrag löschen",
-    "deleteConfirmation": "Möchten Sie diesen Eintrag wirklich löschen?"
+    "deleteConfirmation": "Möchten Sie diesen Eintrag wirklich löschen?",
+    "recentEntries": "Letzte Einträge"
 } 

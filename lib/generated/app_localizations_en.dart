@@ -95,4 +95,7 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get deleteConfirmation =>
       'Are you sure you want to delete this entry?';
+
+  @override
+  String get recentEntries => 'Recent Entries';
 }
