@@ -298,12 +298,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (context) => AddProteinModal(
-        onAdd: (amount, source) {
+        onAdd: (amount, source, timestamp) {
           final entry = ProteinEntry(
-            date: DateFormat('yyyy-MM-dd').format(DateTime.now()),
+            date: DateFormat('yyyy-MM-dd').format(timestamp),
             amount: amount.toInt(),
             source: source,
-            timestamp: DateTime.now(),
+            timestamp: timestamp,
           );
           setState(() {
             _proteinEntries.add(entry);
@@ -356,16 +356,17 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       builder: (context) => AddProteinModal(
         initialAmount: entry.amount.toDouble(),
         initialSource: entry.source,
-        onAdd: (amount, source) {
+        initialTimestamp: entry.timestamp,
+        onAdd: (amount, source, timestamp) {
           setState(() {
             final index = _proteinEntries
                 .indexWhere((e) => e.timestamp == entry.timestamp);
             if (index != -1) {
               _proteinEntries[index] = ProteinEntry(
-                date: entry.date,
+                date: DateFormat('yyyy-MM-dd').format(timestamp),
                 amount: amount.toInt(),
                 source: source,
-                timestamp: entry.timestamp,
+                timestamp: timestamp,
               );
             }
           });
@@ -808,35 +809,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                       leading: Container(
                                         padding: const EdgeInsets.all(8),
                                         decoration: BoxDecoration(
-                                          color: AppColors.primaryLight,
-                                          borderRadius:
-                                              BorderRadius.circular(8),
-                                        ),
-                                        child: Icon(
-                                          Icons.edit,
-                                          color: AppColors.primary,
-                                        ),
-                                      ),
-                                      title: Text(
-                                        l10n.edit,
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w500,
-                                          color: colorScheme.onSurface,
-                                        ),
-                                      ),
-                                      onTap: () {
-                                        HapticFeedback.mediumImpact();
-                                        Navigator.pop(context);
-                                        _editProteinEntry(entry);
-                                      },
-                                    ),
-                                    const SizedBox(height: 16),
-                                    ListTile(
-                                      contentPadding: EdgeInsets.zero,
-                                      leading: Container(
-                                        padding: const EdgeInsets.all(8),
-                                        decoration: BoxDecoration(
                                           color:
                                               Colors.red.withValues(alpha: 0.1),
                                           borderRadius:
@@ -1004,15 +976,17 @@ class CircularProgressPainter extends CustomPainter {
 }
 
 class AddProteinModal extends StatefulWidget {
-  final Function(double, String) onAdd;
+  final Function(double, String, DateTime) onAdd;
   final double? initialAmount;
   final String? initialSource;
+  final DateTime? initialTimestamp;
 
   const AddProteinModal({
     super.key,
     required this.onAdd,
     this.initialAmount,
     this.initialSource,
+    this.initialTimestamp,
   });
 
   @override
@@ -1023,6 +997,7 @@ class _AddProteinModalState extends State<AddProteinModal> {
   final _amountController = TextEditingController();
   final _sourceController = TextEditingController();
   List<Map<String, dynamic>> _customSources = [];
+  DateTime _selectedDateTime = DateTime.now();
 
   @override
   void initState() {
@@ -1033,6 +1008,7 @@ class _AddProteinModalState extends State<AddProteinModal> {
     if (widget.initialSource != null) {
       _sourceController.text = widget.initialSource!;
     }
+    _selectedDateTime = widget.initialTimestamp ?? DateTime.now();
     _loadCustomSources();
   }
 
@@ -1084,6 +1060,58 @@ class _AddProteinModalState extends State<AddProteinModal> {
     await prefs.setStringList('custom_sources', customSourcesJson);
 
     setState(() {});
+  }
+
+  Future<void> _selectDateTime() async {
+    HapticFeedback.mediumImpact();
+    final l10n = AppLocalizations.of(context)!;
+    final colorScheme = Theme.of(context).colorScheme;
+
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: _selectedDateTime,
+      firstDate: DateTime(2020),
+      lastDate: DateTime.now(),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: colorScheme.copyWith(
+              primary: AppColors.primary,
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+
+    if (pickedDate != null) {
+      final TimeOfDay? pickedTime = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.fromDateTime(_selectedDateTime),
+        builder: (context, child) {
+          return Theme(
+            data: Theme.of(context).copyWith(
+              colorScheme: colorScheme.copyWith(
+                primary: AppColors.primary,
+              ),
+            ),
+            child: child!,
+          );
+        },
+      );
+
+      if (pickedTime != null) {
+        setState(() {
+          _selectedDateTime = DateTime(
+            pickedDate.year,
+            pickedDate.month,
+            pickedDate.day,
+            pickedTime.hour,
+            pickedTime.minute,
+          );
+        });
+      }
+    }
   }
 
   @override
@@ -1378,6 +1406,39 @@ class _AddProteinModalState extends State<AddProteinModal> {
                 ),
               ),
             ),
+            const SizedBox(height: 16),
+            GestureDetector(
+              onTap: _selectDateTime,
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: colorScheme.surface,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: colorScheme.outline.withValues(alpha: 0.5),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.access_time,
+                      color: colorScheme.onSurface.withValues(alpha: 0.7),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Text(
+                        DateFormat('EEEE, d. MMMM yyyy, HH:mm')
+                            .format(_selectedDateTime),
+                        style: TextStyle(
+                          color: colorScheme.onSurface,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
             const SizedBox(height: 24),
             SizedBox(
               width: double.infinity,
@@ -1387,12 +1448,13 @@ class _AddProteinModalState extends State<AddProteinModal> {
                   HapticFeedback.mediumImpact();
                   final amount = int.tryParse(_amountController.text);
                   final source = _sourceController.text.trim();
+                  final timestamp = _selectedDateTime;
 
                   if (amount != null && amount > 0) {
                     if (source.isNotEmpty) {
                       _saveCustomSource(source, amount);
                     }
-                    widget.onAdd(amount.toDouble(), source);
+                    widget.onAdd(amount.toDouble(), source, timestamp);
                     Navigator.pop(context);
                   }
                 },
@@ -2167,6 +2229,74 @@ class _RecipeListPageState extends State<RecipeListPage> {
                       onTap: () {
                         HapticFeedback.mediumImpact();
                         Navigator.pop(context, recipe);
+                      },
+                      onLongPress: () {
+                        HapticFeedback.mediumImpact();
+                        showModalBottomSheet(
+                          context: context,
+                          backgroundColor: Colors.transparent,
+                          builder: (context) => Container(
+                            padding: const EdgeInsets.all(24),
+                            decoration: BoxDecoration(
+                              color: colorScheme.surface,
+                              borderRadius: const BorderRadius.vertical(
+                                  top: Radius.circular(20)),
+                            ),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      l10n.editEntry,
+                                      style: TextStyle(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold,
+                                        color: colorScheme.onSurface,
+                                      ),
+                                    ),
+                                    IconButton(
+                                      onPressed: () => Navigator.pop(context),
+                                      icon: const Icon(Icons.close),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 24),
+                                ListTile(
+                                  contentPadding: EdgeInsets.zero,
+                                  leading: Container(
+                                    padding: const EdgeInsets.all(8),
+                                    decoration: BoxDecoration(
+                                      color: Colors.red.withValues(alpha: 0.1),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: const Icon(
+                                      Icons.delete,
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                  title: Text(
+                                    l10n.delete,
+                                    style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    HapticFeedback.heavyImpact();
+                                    Navigator.pop(context);
+                                    _deleteRecipe(index);
+                                  },
+                                ),
+                                const SizedBox(height: 8),
+                              ],
+                            ),
+                          ),
+                        );
                       },
                     ),
                   ),
