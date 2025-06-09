@@ -496,27 +496,89 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       final l10n = AppLocalizations.of(context)!;
                       showModalBottomSheet(
                         context: context,
-                        builder: (context) => SafeArea(
+                        backgroundColor: Colors.transparent,
+                        builder: (context) => Container(
+                          padding: const EdgeInsets.all(24),
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                            borderRadius:
+                                BorderRadius.vertical(top: Radius.circular(20)),
+                          ),
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    l10n.editEntry,
+                                    style: const TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  IconButton(
+                                    onPressed: () => Navigator.pop(context),
+                                    icon: const Icon(Icons.close),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 24),
                               ListTile(
-                                leading: const Icon(Icons.edit),
-                                title: Text(l10n.edit),
+                                contentPadding: EdgeInsets.zero,
+                                leading: Container(
+                                  padding: const EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    color: AppColors.primaryLight,
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: const Icon(
+                                    Icons.edit,
+                                    color: AppColors.primary,
+                                  ),
+                                ),
+                                title: Text(
+                                  l10n.edit,
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
                                 onTap: () {
                                   Navigator.pop(context);
                                   _editProteinEntry(entry);
                                 },
                               ),
+                              const SizedBox(height: 16),
                               ListTile(
-                                leading:
-                                    const Icon(Icons.delete, color: Colors.red),
-                                title: Text(l10n.delete),
+                                contentPadding: EdgeInsets.zero,
+                                leading: Container(
+                                  padding: const EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    color: Colors.red.withOpacity(0.1),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: const Icon(
+                                    Icons.delete,
+                                    color: Colors.red,
+                                  ),
+                                ),
+                                title: Text(
+                                  l10n.delete,
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.red,
+                                  ),
+                                ),
                                 onTap: () {
                                   Navigator.pop(context);
                                   _deleteProteinEntry(entry);
                                 },
                               ),
+                              const SizedBox(height: 8),
                             ],
                           ),
                         ),
