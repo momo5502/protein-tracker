@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter/services.dart';
 import 'generated/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
@@ -291,6 +292,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   void _addProteinEntry() {
+    HapticFeedback.mediumImpact();
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -315,6 +317,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   void _setDailyGoal() {
+    HapticFeedback.mediumImpact();
     showDialog(
       context: context,
       builder: (context) => SetGoalDialog(
@@ -335,6 +338,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   void _showHistory() {
+    HapticFeedback.mediumImpact();
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -344,6 +348,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   void _editProteinEntry(ProteinEntry entry) {
+    HapticFeedback.mediumImpact();
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -373,6 +378,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   void _deleteProteinEntry(ProteinEntry entry) {
+    HapticFeedback.heavyImpact();
     final l10n = AppLocalizations.of(context)!;
     final colorScheme = Theme.of(context).colorScheme;
 
@@ -480,6 +486,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     child: ElevatedButton(
                       onPressed: () {
                         setState(() {
+                          HapticFeedback.heavyImpact();
                           _proteinEntries.removeWhere(
                               (e) => e.timestamp == entry.timestamp);
                         });
@@ -528,10 +535,19 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         ),
         backgroundColor: Colors.transparent,
         actions: [
-          IconButton(icon: const Icon(Icons.history), onPressed: _showHistory),
+          IconButton(
+            icon: const Icon(Icons.history),
+            onPressed: () {
+              HapticFeedback.mediumImpact();
+              _showHistory();
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.settings),
-            onPressed: _setDailyGoal,
+            onPressed: () {
+              HapticFeedback.mediumImpact();
+              _setDailyGoal();
+            },
           ),
         ],
       ),
@@ -720,6 +736,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         padding: const EdgeInsets.only(bottom: 12),
                         child: GestureDetector(
                           onLongPress: () {
+                            HapticFeedback.mediumImpact();
                             final l10n = AppLocalizations.of(context)!;
                             showModalBottomSheet(
                               context: context,
@@ -778,6 +795,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                         ),
                                       ),
                                       onTap: () {
+                                        HapticFeedback.mediumImpact();
                                         Navigator.pop(context);
                                         _editProteinEntry(entry);
                                       },
@@ -807,6 +825,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                         ),
                                       ),
                                       onTap: () {
+                                        HapticFeedback.heavyImpact();
                                         Navigator.pop(context);
                                         _deleteProteinEntry(entry);
                                       },
@@ -1061,7 +1080,10 @@ class _AddProteinModalState extends State<AddProteinModal> {
                   ),
                 ),
                 IconButton(
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: () {
+                    HapticFeedback.lightImpact();
+                    Navigator.pop(context);
+                  },
                   icon: Icon(Icons.close, color: colorScheme.onSurface),
                 ),
               ],
@@ -1174,6 +1196,7 @@ class _AddProteinModalState extends State<AddProteinModal> {
               height: 50,
               child: ElevatedButton(
                 onPressed: () {
+                  HapticFeedback.mediumImpact();
                   final amount = int.tryParse(_amountController.text);
                   final source = _sourceController.text.trim();
 
@@ -1262,11 +1285,13 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
   }
 
   void _cancelChanges() {
+    HapticFeedback.lightImpact();
     // Revert all changes
     setState(() {
       _selectedLanguage = _originalLanguage;
       _selectedColor = _originalColor;
       _selectedThemeMode = _originalThemeMode;
+      _controller.text = _originalGoal.toInt().toString();
     });
 
     // Revert color
@@ -1286,6 +1311,7 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
   }
 
   void _showColorPicker() {
+    HapticFeedback.mediumImpact();
     Color tempColor = _selectedColor;
     Color originalColor = _selectedColor;
 
@@ -1313,6 +1339,7 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
                   ),
                   IconButton(
                     onPressed: () {
+                      HapticFeedback.lightImpact();
                       setState(() {
                         _selectedColor = originalColor;
                       });
@@ -1343,6 +1370,7 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
                   Expanded(
                     child: TextButton(
                       onPressed: () {
+                        HapticFeedback.lightImpact();
                         setState(() {
                           _selectedColor = originalColor;
                         });
@@ -1368,6 +1396,7 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
+                        HapticFeedback.mediumImpact();
                         setState(() {
                           _selectedColor = tempColor;
                         });
@@ -1431,7 +1460,10 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
                   ),
                 ),
                 IconButton(
-                  onPressed: _cancelChanges,
+                  onPressed: () {
+                    HapticFeedback.lightImpact();
+                    _cancelChanges();
+                  },
                   icon: Icon(Icons.close, color: colorScheme.onSurface),
                 ),
               ],
@@ -1486,7 +1518,10 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
             ),
             const SizedBox(height: 12),
             GestureDetector(
-              onTap: _showColorPicker,
+              onTap: () {
+                HapticFeedback.mediumImpact();
+                _showColorPicker();
+              },
               child: Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
@@ -1581,6 +1616,7 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
                   ),
                 ],
                 onChanged: (value) {
+                  HapticFeedback.mediumImpact();
                   setState(() {
                     _selectedLanguage = value!;
                   });
@@ -1631,6 +1667,7 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
                   ),
                 ],
                 onChanged: (value) {
+                  HapticFeedback.mediumImpact();
                   setState(() {
                     _selectedThemeMode = value!;
                   });
@@ -1643,7 +1680,10 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
               children: [
                 Expanded(
                   child: TextButton(
-                    onPressed: _cancelChanges,
+                    onPressed: () {
+                      HapticFeedback.lightImpact();
+                      _cancelChanges();
+                    },
                     style: TextButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
@@ -1664,6 +1704,7 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
                 Expanded(
                   child: ElevatedButton(
                     onPressed: () {
+                      HapticFeedback.mediumImpact();
                       final goal = double.tryParse(_controller.text);
                       if (goal != null && goal > 0) {
                         widget.onSet(goal);
