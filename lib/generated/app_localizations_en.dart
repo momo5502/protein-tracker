@@ -18,7 +18,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get progressOf => 'of';
 
   @override
-  String get complete => 'Complete';
+  String get complete => 'complete';
 
   @override
   String get todayEntries => 'Today\'s Entries';
@@ -42,13 +42,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get proteinSource => 'Protein Source';
 
   @override
-  String get proteinSourceHint => 'e.g., Chicken breast, Protein shake';
+  String get proteinSourceHint => 'e.g., Chicken Breast';
 
   @override
-  String get proteinAmount => 'Protein Amount (g)';
+  String get proteinAmount => 'Protein Amount';
 
   @override
-  String get proteinAmountHint => 'Enter grams of protein';
+  String get proteinAmountHint => 'e.g., 30';
 
   @override
   String get addEntry => 'Add Entry';
@@ -57,7 +57,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get setDailyGoal => 'Set Daily Goal';
 
   @override
-  String get dailyProteinGoal => 'Daily Protein Goal (g)';
+  String get dailyProteinGoal => 'Daily Protein Goal';
 
   @override
   String get cancel => 'Cancel';
@@ -69,7 +69,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get history => 'History';
 
   @override
-  String get noHistory => 'No history yet';
+  String get noHistory => 'No history available';
 
   @override
   String get today => 'Today';
@@ -98,4 +98,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get recentEntries => 'Recent Entries';
+
+  @override
+  String get entry => 'Entry';
 }

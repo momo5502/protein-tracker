@@ -613,7 +613,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  entry.source,
+                                  entry.source.isEmpty
+                                      ? l10n.entry
+                                      : entry.source,
                                   style: const TextStyle(
                                     fontWeight: FontWeight.w600,
                                     fontSize: 16,
@@ -888,8 +890,10 @@ class _AddProteinModalState extends State<AddProteinModal> {
                   final amount = int.tryParse(_amountController.text);
                   final source = _sourceController.text.trim();
 
-                  if (amount != null && amount > 0 && source.isNotEmpty) {
-                    _saveCustomSource(source, amount);
+                  if (amount != null && amount > 0) {
+                    if (source.isNotEmpty) {
+                      _saveCustomSource(source, amount);
+                    }
                     widget.onAdd(amount.toDouble(), source);
                     Navigator.pop(context);
                   }

@@ -119,7 +119,7 @@ abstract class AppLocalizations {
   /// No description provided for @complete.
   ///
   /// In en, this message translates to:
-  /// **'Complete'**
+  /// **'complete'**
   String get complete;
 
   /// No description provided for @todayEntries.
@@ -167,19 +167,19 @@ abstract class AppLocalizations {
   /// No description provided for @proteinSourceHint.
   ///
   /// In en, this message translates to:
-  /// **'e.g., Chicken breast, Protein shake'**
+  /// **'e.g., Chicken Breast'**
   String get proteinSourceHint;
 
   /// No description provided for @proteinAmount.
   ///
   /// In en, this message translates to:
-  /// **'Protein Amount (g)'**
+  /// **'Protein Amount'**
   String get proteinAmount;
 
   /// No description provided for @proteinAmountHint.
   ///
   /// In en, this message translates to:
-  /// **'Enter grams of protein'**
+  /// **'e.g., 30'**
   String get proteinAmountHint;
 
   /// No description provided for @addEntry.
@@ -197,7 +197,7 @@ abstract class AppLocalizations {
   /// No description provided for @dailyProteinGoal.
   ///
   /// In en, this message translates to:
-  /// **'Daily Protein Goal (g)'**
+  /// **'Daily Protein Goal'**
   String get dailyProteinGoal;
 
   /// No description provided for @cancel.
@@ -221,7 +221,7 @@ abstract class AppLocalizations {
   /// No description provided for @noHistory.
   ///
   /// In en, this message translates to:
-  /// **'No history yet'**
+  /// **'No history available'**
   String get noHistory;
 
   /// No description provided for @today.
@@ -277,6 +277,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Recent Entries'**
   String get recentEntries;
+
+  /// No description provided for @entry.
+  ///
+  /// In en, this message translates to:
+  /// **'Entry'**
+  String get entry;
 }
 
 class _AppLocalizationsDelegate
