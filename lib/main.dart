@@ -4,6 +4,24 @@ import 'package:intl/intl.dart';
 import 'dart:convert';
 import 'dart:math' as math;
 
+// Custom color scheme class
+class AppColors {
+  static const Color primary = Color(0xFF6366F1);
+
+  // Light theme colors
+  static ColorScheme get lightColorScheme =>
+      ColorScheme.fromSeed(seedColor: primary, brightness: Brightness.light);
+
+  // Dark theme colors
+  static ColorScheme get darkColorScheme =>
+      ColorScheme.fromSeed(seedColor: primary, brightness: Brightness.dark);
+
+  // Common color variations
+  static Color get primaryLight => primary.withOpacity(0.1);
+  static Color get primaryMedium => primary.withOpacity(0.3);
+  static Color get primaryDark => primary.withOpacity(0.8);
+}
+
 void main() {
   runApp(const ProteinTrackerApp());
 }
@@ -18,10 +36,7 @@ class ProteinTrackerApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF6366F1),
-          brightness: Brightness.light,
-        ),
+        colorScheme: AppColors.lightColorScheme,
         fontFamily: 'SF Pro Display',
         appBarTheme: const AppBarTheme(
           centerTitle: true,
@@ -142,7 +157,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     final percentage = _progressPercentage;
     if (percentage >= 1.0) return Colors.green;
     if (percentage >= 0.8) return Colors.orange;
-    return const Color(0xFF6366F1);
+    return AppColors.primary;
   }
 
   void _addProteinEntry() {
@@ -317,7 +332,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   icon: const Icon(Icons.add),
                   label: const Text('Add'),
                   style: TextButton.styleFrom(
-                    foregroundColor: const Color(0xFF6366F1),
+                    foregroundColor: AppColors.primary,
                   ),
                 ),
               ],
@@ -387,7 +402,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           width: 12,
                           height: 12,
                           decoration: BoxDecoration(
-                            color: const Color(0xFF6366F1),
+                            color: AppColors.primary,
                             borderRadius: BorderRadius.circular(6),
                           ),
                         ),
@@ -418,7 +433,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 18,
-                            color: Color(0xFF6366F1),
+                            color: AppColors.primary,
                           ),
                         ),
                       ],
@@ -433,7 +448,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         onPressed: _addProteinEntry,
         icon: const Icon(Icons.add),
         label: const Text('Add Protein'),
-        backgroundColor: const Color(0xFF6366F1),
+        backgroundColor: AppColors.primary,
         foregroundColor: Colors.white,
         elevation: 8,
       ),
@@ -574,16 +589,14 @@ class _AddProteinModalState extends State<AddProteinModal> {
                           vertical: 8,
                         ),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF6366F1).withOpacity(0.1),
+                          color: AppColors.primaryLight,
                           borderRadius: BorderRadius.circular(20),
-                          border: Border.all(
-                            color: const Color(0xFF6366F1).withOpacity(0.3),
-                          ),
+                          border: Border.all(color: AppColors.primaryMedium),
                         ),
                         child: Text(
                           '${source['name']} (${source['protein']}g)',
                           style: const TextStyle(
-                            color: Color(0xFF6366F1),
+                            color: AppColors.primary,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -639,7 +652,7 @@ class _AddProteinModalState extends State<AddProteinModal> {
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF6366F1),
+                  backgroundColor: AppColors.primary,
                   foregroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -773,7 +786,7 @@ class HistoryPage extends StatelessWidget {
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF6366F1),
+                        color: AppColors.primary,
                       ),
                     ),
                   ),
