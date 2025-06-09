@@ -663,7 +663,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         margin: const EdgeInsets.symmetric(horizontal: 20),
                         padding: const EdgeInsets.all(24),
                         decoration: BoxDecoration(
-                          color: colorScheme.surface,
+                          color: Theme.of(context).brightness == Brightness.dark
+                              ? colorScheme.surfaceVariant
+                              : Color.lerp(
+                                  colorScheme.surface, Colors.white, 0.7),
                           borderRadius: BorderRadius.circular(16),
                           boxShadow: [
                             BoxShadow(
