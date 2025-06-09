@@ -30,9 +30,9 @@ class AppColors {
       );
 
   // Common color variations
-  static Color get primaryLight => primary.withOpacity(0.1);
-  static Color get primaryMedium => primary.withOpacity(0.3);
-  static Color get primaryDark => primary.withOpacity(0.8);
+  static Color get primaryLight => primary.withValues(alpha: 0.1);
+  static Color get primaryMedium => primary.withValues(alpha: 0.3);
+  static Color get primaryDark => primary.withValues(alpha: 0.8);
 }
 
 void main() {
@@ -415,8 +415,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 decoration: BoxDecoration(
                   color: colorScheme.surfaceVariant,
                   borderRadius: BorderRadius.circular(12),
-                  border:
-                      Border.all(color: colorScheme.outline.withOpacity(0.5)),
+                  border: Border.all(
+                      color: colorScheme.outline.withValues(alpha: 0.5)),
                 ),
                 child: Row(
                   children: [
@@ -557,7 +557,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
-                        color: _progressColor.withOpacity(0.3),
+                        color: _progressColor.withValues(alpha: 0.3),
                         blurRadius: 15,
                         offset: const Offset(0, 8),
                       ),
@@ -568,7 +568,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       Text(
                         l10n.todayProgress,
                         style: TextStyle(
-                          color: Colors.white.withOpacity(0.9),
+                          color: Colors.white.withValues(alpha: 0.9),
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
                         ),
@@ -583,7 +583,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                               progress: _progressAnimation.value *
                                   _progressPercentage,
                               strokeWidth: 12,
-                              backgroundColor: Colors.white.withOpacity(0.2),
+                              backgroundColor:
+                                  Colors.white.withValues(alpha: 0.2),
                               progressColor: Colors.white,
                             ),
                             child: SizedBox(
@@ -603,7 +604,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                   Text(
                                     '${l10n.progressOf} ${_dailyGoal.toInt()}g',
                                     style: TextStyle(
-                                      color: Colors.white.withOpacity(0.8),
+                                      color:
+                                          Colors.white.withValues(alpha: 0.8),
                                       fontSize: 14,
                                     ),
                                   ),
@@ -665,7 +667,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           borderRadius: BorderRadius.circular(16),
                           boxShadow: [
                             BoxShadow(
-                              color: colorScheme.shadow.withOpacity(0.05),
+                              color: colorScheme.shadow.withValues(alpha: 0.05),
                               blurRadius: 10,
                               offset: const Offset(0, 4),
                             ),
@@ -678,7 +680,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                             Icon(
                               Icons.restaurant_menu,
                               size: 48,
-                              color: colorScheme.onSurface.withOpacity(0.4),
+                              color:
+                                  colorScheme.onSurface.withValues(alpha: 0.4),
                             ),
                             const SizedBox(height: 16),
                             Text(
@@ -686,7 +689,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w600,
-                                color: colorScheme.onSurface.withOpacity(0.6),
+                                color: colorScheme.onSurface
+                                    .withValues(alpha: 0.6),
                               ),
                             ),
                             const SizedBox(height: 8),
@@ -694,7 +698,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                               l10n.startTracking,
                               style: TextStyle(
                                 fontSize: 14,
-                                color: colorScheme.onSurface.withOpacity(0.5),
+                                color: colorScheme.onSurface
+                                    .withValues(alpha: 0.5),
                               ),
                             ),
                           ],
@@ -779,7 +784,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                       leading: Container(
                                         padding: const EdgeInsets.all(8),
                                         decoration: BoxDecoration(
-                                          color: Colors.red.withOpacity(0.1),
+                                          color:
+                                              Colors.red.withValues(alpha: 0.1),
                                           borderRadius:
                                               BorderRadius.circular(8),
                                         ),
@@ -818,7 +824,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                               borderRadius: BorderRadius.circular(12),
                               boxShadow: [
                                 BoxShadow(
-                                  color: colorScheme.shadow.withOpacity(0.05),
+                                  color: colorScheme.shadow
+                                      .withValues(alpha: 0.05),
                                   blurRadius: 8,
                                   offset: const Offset(0, 2),
                                 ),
@@ -860,9 +867,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                           color: Theme.of(context).brightness ==
                                                   Brightness.dark
                                               ? colorScheme.onSurfaceVariant
-                                                  .withOpacity(0.6)
+                                                  .withValues(alpha: 0.6)
                                               : colorScheme.onSurface
-                                                  .withOpacity(0.6),
+                                                  .withValues(alpha: 0.6),
                                           fontSize: 14,
                                         ),
                                       ),
@@ -1105,19 +1112,19 @@ class _AddProteinModalState extends State<AddProteinModal> {
               decoration: InputDecoration(
                 labelText: l10n.proteinSource,
                 hintText: l10n.proteinSourceHint,
-                labelStyle:
-                    TextStyle(color: colorScheme.onSurface.withOpacity(0.7)),
-                hintStyle:
-                    TextStyle(color: colorScheme.onSurface.withOpacity(0.5)),
+                labelStyle: TextStyle(
+                    color: colorScheme.onSurface.withValues(alpha: 0.7)),
+                hintStyle: TextStyle(
+                    color: colorScheme.onSurface.withValues(alpha: 0.5)),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
                 prefixIcon: Icon(Icons.restaurant_menu,
-                    color: colorScheme.onSurface.withOpacity(0.7)),
+                    color: colorScheme.onSurface.withValues(alpha: 0.7)),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide:
-                      BorderSide(color: colorScheme.outline.withOpacity(0.5)),
+                  borderSide: BorderSide(
+                      color: colorScheme.outline.withValues(alpha: 0.5)),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -1133,22 +1140,22 @@ class _AddProteinModalState extends State<AddProteinModal> {
               decoration: InputDecoration(
                 labelText: l10n.proteinAmount,
                 hintText: l10n.proteinAmountHint,
-                labelStyle:
-                    TextStyle(color: colorScheme.onSurface.withOpacity(0.7)),
-                hintStyle:
-                    TextStyle(color: colorScheme.onSurface.withOpacity(0.5)),
+                labelStyle: TextStyle(
+                    color: colorScheme.onSurface.withValues(alpha: 0.7)),
+                hintStyle: TextStyle(
+                    color: colorScheme.onSurface.withValues(alpha: 0.5)),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
                 prefixIcon: Icon(Icons.fitness_center,
-                    color: colorScheme.onSurface.withOpacity(0.7)),
+                    color: colorScheme.onSurface.withValues(alpha: 0.7)),
                 suffixText: 'g',
-                suffixStyle:
-                    TextStyle(color: colorScheme.onSurface.withOpacity(0.7)),
+                suffixStyle: TextStyle(
+                    color: colorScheme.onSurface.withValues(alpha: 0.7)),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide:
-                      BorderSide(color: colorScheme.outline.withOpacity(0.5)),
+                  borderSide: BorderSide(
+                      color: colorScheme.outline.withValues(alpha: 0.5)),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -1440,20 +1447,20 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 hintText: l10n.proteinAmountHint,
-                hintStyle:
-                    TextStyle(color: colorScheme.onSurface.withOpacity(0.5)),
+                hintStyle: TextStyle(
+                    color: colorScheme.onSurface.withValues(alpha: 0.5)),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
                 prefixIcon: Icon(Icons.fitness_center,
-                    color: colorScheme.onSurface.withOpacity(0.7)),
+                    color: colorScheme.onSurface.withValues(alpha: 0.7)),
                 suffixText: 'g',
-                suffixStyle:
-                    TextStyle(color: colorScheme.onSurface.withOpacity(0.7)),
+                suffixStyle: TextStyle(
+                    color: colorScheme.onSurface.withValues(alpha: 0.7)),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide:
-                      BorderSide(color: colorScheme.outline.withOpacity(0.5)),
+                  borderSide: BorderSide(
+                      color: colorScheme.outline.withValues(alpha: 0.5)),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -1480,8 +1487,8 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
                 decoration: BoxDecoration(
                   color: colorScheme.surface,
                   borderRadius: BorderRadius.circular(12),
-                  border:
-                      Border.all(color: colorScheme.outline.withOpacity(0.5)),
+                  border: Border.all(
+                      color: colorScheme.outline.withValues(alpha: 0.5)),
                 ),
                 child: Row(
                   children: [
@@ -1492,7 +1499,7 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
                         color: _selectedColor,
                         shape: BoxShape.circle,
                         border: Border.all(
-                            color: colorScheme.outline.withOpacity(0.5)),
+                            color: colorScheme.outline.withValues(alpha: 0.5)),
                       ),
                     ),
                     const SizedBox(width: 16),
@@ -1521,7 +1528,8 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
               padding: const EdgeInsets.symmetric(horizontal: 12),
               decoration: BoxDecoration(
                 color: colorScheme.surface,
-                border: Border.all(color: colorScheme.outline.withOpacity(0.5)),
+                border: Border.all(
+                    color: colorScheme.outline.withValues(alpha: 0.5)),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: DropdownButton<String>(
@@ -1590,7 +1598,8 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
               padding: const EdgeInsets.symmetric(horizontal: 12),
               decoration: BoxDecoration(
                 color: colorScheme.surface,
-                border: Border.all(color: colorScheme.outline.withOpacity(0.5)),
+                border: Border.all(
+                    color: colorScheme.outline.withValues(alpha: 0.5)),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: DropdownButton<ThemeMode>(
@@ -1729,7 +1738,7 @@ class HistoryPage extends StatelessWidget {
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: [
                       BoxShadow(
-                        color: colorScheme.shadow.withOpacity(0.05),
+                        color: colorScheme.shadow.withValues(alpha: 0.05),
                         blurRadius: 8,
                         offset: const Offset(0, 2),
                       ),
