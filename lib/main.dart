@@ -447,6 +447,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           fontWeight: FontWeight.w500,
                           color: colorScheme.onSurface,
                         ),
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   ],
@@ -861,6 +862,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                                   Brightness.dark
                                               ? colorScheme.onSurfaceVariant
                                               : colorScheme.onSurface,
+                                          overflow: TextOverflow.ellipsis,
                                         ),
                                       ),
                                       Text(
@@ -1506,11 +1508,14 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
                       ),
                     ),
                     const SizedBox(width: 16),
-                    Text(
-                      l10n.tapToChangeColor,
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: colorScheme.onSurface,
+                    Expanded(
+                      child: Text(
+                        l10n.tapToChangeColor,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: colorScheme.onSurface,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                     ),
                   ],
@@ -1753,8 +1758,12 @@ class HistoryPage extends StatelessWidget {
                           ? l10n.today
                           : DateFormat('EEEE, MMM d').format(dateObj),
                       style: const TextStyle(fontWeight: FontWeight.w600),
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    subtitle: Text(DateFormat('yyyy-MM-dd').format(dateObj)),
+                    subtitle: Text(
+                      DateFormat('yyyy-MM-dd').format(dateObj),
+                      overflow: TextOverflow.ellipsis,
+                    ),
                     trailing: Text(
                       '${total.toInt()}g',
                       style: TextStyle(
