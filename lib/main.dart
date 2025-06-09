@@ -1438,8 +1438,8 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Fixed header
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -1461,88 +1461,222 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
               ],
             ),
             const SizedBox(height: 24),
-            Text(
-              l10n.dailyProteinGoal,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: colorScheme.onSurface,
-              ),
-            ),
-            const SizedBox(height: 12),
-            TextField(
-              controller: _controller,
-              style: TextStyle(color: colorScheme.onSurface),
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                hintText: l10n.proteinAmountHint,
-                hintStyle: TextStyle(
-                    color: colorScheme.onSurface.withValues(alpha: 0.5)),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                prefixIcon: Icon(Icons.fitness_center,
-                    color: colorScheme.onSurface.withValues(alpha: 0.7)),
-                suffixText: 'g',
-                suffixStyle: TextStyle(
-                    color: colorScheme.onSurface.withValues(alpha: 0.7)),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(
-                      color: colorScheme.outline.withValues(alpha: 0.5)),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: AppColors.primary),
-                ),
-                filled: true,
-                fillColor: colorScheme.surface,
-              ),
-            ),
-            const SizedBox(height: 24),
-            Text(
-              l10n.appColor,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: colorScheme.onSurface,
-              ),
-            ),
-            const SizedBox(height: 12),
-            GestureDetector(
-              onTap: () {
-                HapticFeedback.mediumImpact();
-                _showColorPicker();
-              },
-              child: Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: colorScheme.surface,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                      color: colorScheme.outline.withValues(alpha: 0.5)),
-                ),
-                child: Row(
+            // Scrollable content
+            Flexible(
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: _selectedColor,
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                            color: colorScheme.outline.withValues(alpha: 0.5)),
+                    Text(
+                      l10n.dailyProteinGoal,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: colorScheme.onSurface,
                       ),
                     ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: Text(
-                        l10n.tapToChangeColor,
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: colorScheme.onSurface,
-                          overflow: TextOverflow.ellipsis,
+                    const SizedBox(height: 12),
+                    TextField(
+                      controller: _controller,
+                      style: TextStyle(color: colorScheme.onSurface),
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        hintText: l10n.proteinAmountHint,
+                        hintStyle: TextStyle(
+                            color:
+                                colorScheme.onSurface.withValues(alpha: 0.5)),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
                         ),
+                        prefixIcon: Icon(Icons.fitness_center,
+                            color:
+                                colorScheme.onSurface.withValues(alpha: 0.7)),
+                        suffixText: 'g',
+                        suffixStyle: TextStyle(
+                            color:
+                                colorScheme.onSurface.withValues(alpha: 0.7)),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(
+                              color:
+                                  colorScheme.outline.withValues(alpha: 0.5)),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: AppColors.primary),
+                        ),
+                        filled: true,
+                        fillColor: colorScheme.surface,
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    Text(
+                      l10n.appColor,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: colorScheme.onSurface,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    GestureDetector(
+                      onTap: () {
+                        HapticFeedback.mediumImpact();
+                        _showColorPicker();
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: colorScheme.surface,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                              color:
+                                  colorScheme.outline.withValues(alpha: 0.5)),
+                        ),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 40,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                color: _selectedColor,
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                    color: colorScheme.outline
+                                        .withValues(alpha: 0.5)),
+                              ),
+                            ),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: Text(
+                                l10n.tapToChangeColor,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: colorScheme.onSurface,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    Text(
+                      l10n.language,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: colorScheme.onSurface,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      decoration: BoxDecoration(
+                        color: colorScheme.surface,
+                        border: Border.all(
+                            color: colorScheme.outline.withValues(alpha: 0.5)),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: DropdownButton<String>(
+                        value: _selectedLanguage,
+                        isExpanded: true,
+                        underline: const SizedBox(),
+                        dropdownColor: colorScheme.surface,
+                        style: TextStyle(color: colorScheme.onSurface),
+                        items: [
+                          DropdownMenuItem(
+                            value: 'system',
+                            child: Text(l10n.systemDefault),
+                          ),
+                          const DropdownMenuItem(
+                            value: 'en',
+                            child: Text('English'),
+                          ),
+                          const DropdownMenuItem(
+                            value: 'de',
+                            child: Text('Deutsch'),
+                          ),
+                          const DropdownMenuItem(
+                            value: 'fr',
+                            child: Text('Français'),
+                          ),
+                          const DropdownMenuItem(
+                            value: 'es',
+                            child: Text('Español'),
+                          ),
+                          const DropdownMenuItem(
+                            value: 'it',
+                            child: Text('Italiano'),
+                          ),
+                          const DropdownMenuItem(
+                            value: 'pt',
+                            child: Text('Português'),
+                          ),
+                          const DropdownMenuItem(
+                            value: 'ja',
+                            child: Text('日本語'),
+                          ),
+                        ],
+                        onChanged: (value) {
+                          HapticFeedback.mediumImpact();
+                          setState(() {
+                            _selectedLanguage = value!;
+                          });
+                          if (value == 'system') {
+                            widget.onLocaleChanged(null);
+                          } else {
+                            widget.onLocaleChanged(Locale(value!));
+                          }
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    Text(
+                      l10n.theme,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: colorScheme.onSurface,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      decoration: BoxDecoration(
+                        color: colorScheme.surface,
+                        border: Border.all(
+                            color: colorScheme.outline.withValues(alpha: 0.5)),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: DropdownButton<ThemeMode>(
+                        value: _selectedThemeMode,
+                        isExpanded: true,
+                        underline: const SizedBox(),
+                        dropdownColor: colorScheme.surface,
+                        style: TextStyle(color: colorScheme.onSurface),
+                        items: [
+                          DropdownMenuItem(
+                            value: ThemeMode.system,
+                            child: Text(l10n.systemDefault),
+                          ),
+                          DropdownMenuItem(
+                            value: ThemeMode.light,
+                            child: Text(l10n.light),
+                          ),
+                          DropdownMenuItem(
+                            value: ThemeMode.dark,
+                            child: Text(l10n.dark),
+                          ),
+                        ],
+                        onChanged: (value) {
+                          HapticFeedback.mediumImpact();
+                          setState(() {
+                            _selectedThemeMode = value!;
+                          });
+                          widget.onThemeModeChanged(value!);
+                        },
                       ),
                     ),
                   ],
@@ -1550,124 +1684,7 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
               ),
             ),
             const SizedBox(height: 24),
-            Text(
-              l10n.language,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: colorScheme.onSurface,
-              ),
-            ),
-            const SizedBox(height: 12),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              decoration: BoxDecoration(
-                color: colorScheme.surface,
-                border: Border.all(
-                    color: colorScheme.outline.withValues(alpha: 0.5)),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: DropdownButton<String>(
-                value: _selectedLanguage,
-                isExpanded: true,
-                underline: const SizedBox(),
-                dropdownColor: colorScheme.surface,
-                style: TextStyle(color: colorScheme.onSurface),
-                items: [
-                  DropdownMenuItem(
-                    value: 'system',
-                    child: Text(l10n.systemDefault),
-                  ),
-                  const DropdownMenuItem(
-                    value: 'en',
-                    child: Text('English'),
-                  ),
-                  const DropdownMenuItem(
-                    value: 'de',
-                    child: Text('Deutsch'),
-                  ),
-                  const DropdownMenuItem(
-                    value: 'fr',
-                    child: Text('Français'),
-                  ),
-                  const DropdownMenuItem(
-                    value: 'es',
-                    child: Text('Español'),
-                  ),
-                  const DropdownMenuItem(
-                    value: 'it',
-                    child: Text('Italiano'),
-                  ),
-                  const DropdownMenuItem(
-                    value: 'pt',
-                    child: Text('Português'),
-                  ),
-                  const DropdownMenuItem(
-                    value: 'ja',
-                    child: Text('日本語'),
-                  ),
-                ],
-                onChanged: (value) {
-                  HapticFeedback.mediumImpact();
-                  setState(() {
-                    _selectedLanguage = value!;
-                  });
-                  if (value == 'system') {
-                    widget.onLocaleChanged(null);
-                  } else {
-                    widget.onLocaleChanged(Locale(value!));
-                  }
-                },
-              ),
-            ),
-            const SizedBox(height: 24),
-            Text(
-              l10n.theme,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: colorScheme.onSurface,
-              ),
-            ),
-            const SizedBox(height: 12),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              decoration: BoxDecoration(
-                color: colorScheme.surface,
-                border: Border.all(
-                    color: colorScheme.outline.withValues(alpha: 0.5)),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: DropdownButton<ThemeMode>(
-                value: _selectedThemeMode,
-                isExpanded: true,
-                underline: const SizedBox(),
-                dropdownColor: colorScheme.surface,
-                style: TextStyle(color: colorScheme.onSurface),
-                items: [
-                  DropdownMenuItem(
-                    value: ThemeMode.system,
-                    child: Text(l10n.systemDefault),
-                  ),
-                  DropdownMenuItem(
-                    value: ThemeMode.light,
-                    child: Text(l10n.light),
-                  ),
-                  DropdownMenuItem(
-                    value: ThemeMode.dark,
-                    child: Text(l10n.dark),
-                  ),
-                ],
-                onChanged: (value) {
-                  HapticFeedback.mediumImpact();
-                  setState(() {
-                    _selectedThemeMode = value!;
-                  });
-                  widget.onThemeModeChanged(value!);
-                },
-              ),
-            ),
-            const SizedBox(height: 24),
+            // Fixed footer
             Row(
               children: [
                 Expanded(
