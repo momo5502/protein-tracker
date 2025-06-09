@@ -809,6 +809,35 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                       leading: Container(
                                         padding: const EdgeInsets.all(8),
                                         decoration: BoxDecoration(
+                                          color: AppColors.primaryLight,
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
+                                        child: Icon(
+                                          Icons.edit,
+                                          color: AppColors.primary,
+                                        ),
+                                      ),
+                                      title: Text(
+                                        l10n.edit,
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w500,
+                                          color: colorScheme.onSurface,
+                                        ),
+                                      ),
+                                      onTap: () {
+                                        HapticFeedback.mediumImpact();
+                                        Navigator.pop(context);
+                                        _editProteinEntry(entry);
+                                      },
+                                    ),
+                                    const SizedBox(height: 16),
+                                    ListTile(
+                                      contentPadding: EdgeInsets.zero,
+                                      leading: Container(
+                                        padding: const EdgeInsets.all(8),
+                                        decoration: BoxDecoration(
                                           color:
                                               Colors.red.withValues(alpha: 0.1),
                                           borderRadius:
@@ -833,7 +862,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                         _deleteProteinEntry(entry);
                                       },
                                     ),
-                                    const SizedBox(height: 8),
                                   ],
                                 ),
                               ),
