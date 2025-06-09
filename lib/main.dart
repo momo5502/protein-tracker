@@ -760,12 +760,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     ),
                   )
                 : ListView.builder(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    padding: const EdgeInsets.all(16),
                     itemCount: _todayEntries.length,
                     itemBuilder: (context, index) {
                       final entry = _todayEntries[index];
                       return Padding(
-                        padding: const EdgeInsets.only(bottom: 12),
+                        padding: const EdgeInsets.only(bottom: 16),
                         child: GestureDetector(
                           onLongPress: () {
                             HapticFeedback.mediumImpact();
@@ -2074,38 +2074,41 @@ class HistoryPage extends StatelessWidget {
                 final isToday =
                     DateFormat('yyyy-MM-dd').format(DateTime.now()) == date;
 
-                return Container(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).brightness == Brightness.dark
-                        ? colorScheme.surfaceVariant
-                        : Color.lerp(colorScheme.surface, Colors.white, 0.7),
-                    borderRadius: BorderRadius.circular(12),
-                    boxShadow: [
-                      BoxShadow(
-                        color: colorScheme.shadow.withValues(alpha: 0.05),
-                        blurRadius: 8,
-                        offset: const Offset(0, 2),
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 16),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? colorScheme.surfaceVariant
+                          : Color.lerp(colorScheme.surface, Colors.white, 0.7),
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: colorScheme.shadow.withValues(alpha: 0.05),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: ListTile(
+                      title: Text(
+                        isToday
+                            ? l10n.today
+                            : DateFormat('EEEE, MMM d').format(dateObj),
+                        style: const TextStyle(fontWeight: FontWeight.w600),
+                        overflow: TextOverflow.ellipsis,
                       ),
-                    ],
-                  ),
-                  child: ListTile(
-                    title: Text(
-                      isToday
-                          ? l10n.today
-                          : DateFormat('EEEE, MMM d').format(dateObj),
-                      style: const TextStyle(fontWeight: FontWeight.w600),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    subtitle: Text(
-                      DateFormat('yyyy-MM-dd').format(dateObj),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    trailing: Text(
-                      '${total.toInt()}g',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.primary,
+                      subtitle: Text(
+                        DateFormat('yyyy-MM-dd').format(dateObj),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      trailing: Text(
+                        '${total.toInt()}g',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.primary,
+                        ),
                       ),
                     ),
                   ),
