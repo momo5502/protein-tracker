@@ -261,6 +261,65 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     );
   }
 
+  void _editProteinEntry(ProteinEntry entry) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => AddProteinModal(
+        initialAmount: entry.amount,
+        initialSource: entry.source,
+        onAdd: (amount, source) {
+          setState(() {
+            final index = _proteinEntries
+                .indexWhere((e) => e.timestamp == entry.timestamp);
+            if (index != -1) {
+              _proteinEntries[index] = ProteinEntry(
+                date: entry.date,
+                amount: amount,
+                source: source,
+                timestamp: entry.timestamp,
+              );
+            }
+          });
+          _saveData();
+          _progressAnimationController.reset();
+          _progressAnimationController.forward();
+        },
+      ),
+    );
+  }
+
+  void _deleteProteinEntry(ProteinEntry entry) {
+    final l10n = AppLocalizations.of(context)!;
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.deleteEntry),
+        content: Text(l10n.deleteConfirmation),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(l10n.cancel),
+          ),
+          TextButton(
+            onPressed: () {
+              setState(() {
+                _proteinEntries
+                    .removeWhere((e) => e.timestamp == entry.timestamp);
+              });
+              _saveData();
+              _progressAnimationController.reset();
+              _progressAnimationController.forward();
+              Navigator.pop(context);
+            },
+            child: Text(l10n.delete),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -432,60 +491,92 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               ..._todayEntries.map(
                 (entry) => Padding(
                   padding: const EdgeInsets.only(bottom: 12),
-                  child: Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.05),
-                          blurRadius: 8,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 12,
-                          height: 12,
-                          decoration: BoxDecoration(
-                            color: AppColors.primary,
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                        ),
-                        const SizedBox(width: 16),
-                        Expanded(
+                  child: GestureDetector(
+                    onLongPress: () {
+                      final l10n = AppLocalizations.of(context)!;
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (context) => SafeArea(
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
                             children: [
-                              Text(
-                                entry.source,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 16,
-                                ),
+                              ListTile(
+                                leading: const Icon(Icons.edit),
+                                title: Text(l10n.edit),
+                                onTap: () {
+                                  Navigator.pop(context);
+                                  _editProteinEntry(entry);
+                                },
                               ),
-                              Text(
-                                DateFormat('h:mm a').format(entry.timestamp),
-                                style: TextStyle(
-                                  color: Colors.grey[600],
-                                  fontSize: 14,
-                                ),
+                              ListTile(
+                                leading:
+                                    const Icon(Icons.delete, color: Colors.red),
+                                title: Text(l10n.delete),
+                                onTap: () {
+                                  Navigator.pop(context);
+                                  _deleteProteinEntry(entry);
+                                },
                               ),
                             ],
                           ),
                         ),
-                        Text(
-                          '${entry.amount.toInt()}g',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                            color: AppColors.primary,
+                      );
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.05),
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 12,
+                            height: 12,
+                            decoration: BoxDecoration(
+                              color: AppColors.primary,
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  entry.source,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                Text(
+                                  DateFormat('h:mm a').format(entry.timestamp),
+                                  style: TextStyle(
+                                    color: Colors.grey[600],
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Text(
+                            '${entry.amount.toInt()}g',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                              color: AppColors.primary,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -557,8 +648,15 @@ class CircularProgressPainter extends CustomPainter {
 
 class AddProteinModal extends StatefulWidget {
   final Function(double, String) onAdd;
+  final double? initialAmount;
+  final String? initialSource;
 
-  const AddProteinModal({super.key, required this.onAdd});
+  const AddProteinModal({
+    super.key,
+    required this.onAdd,
+    this.initialAmount,
+    this.initialSource,
+  });
 
   @override
   State<AddProteinModal> createState() => _AddProteinModalState();
@@ -578,6 +676,17 @@ class _AddProteinModalState extends State<AddProteinModal> {
     {'name': 'Quinoa', 'protein': 14},
     {'name': 'Almonds', 'protein': 21},
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.initialAmount != null) {
+      _amountController.text = widget.initialAmount!.toString();
+    }
+    if (widget.initialSource != null) {
+      _sourceController.text = widget.initialSource!;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

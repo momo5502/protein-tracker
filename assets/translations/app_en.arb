@@ -22,5 +22,10 @@
     "noHistory": "No history yet",
     "today": "Today",
     "settings": "Settings",
-    "save": "Save"
+    "save": "Save",
+    "edit": "Edit",
+    "delete": "Delete",
+    "editEntry": "Edit Entry",
+    "deleteEntry": "Delete Entry",
+    "deleteConfirmation": "Are you sure you want to delete this entry?"
 } 

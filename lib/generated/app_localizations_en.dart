@@ -79,4 +79,20 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get save => 'Save';
+
+  @override
+  String get edit => 'Edit';
+
+  @override
+  String get delete => 'Delete';
+
+  @override
+  String get editEntry => 'Edit Entry';
+
+  @override
+  String get deleteEntry => 'Delete Entry';
+
+  @override
+  String get deleteConfirmation =>
+      'Are you sure you want to delete this entry?';
 }

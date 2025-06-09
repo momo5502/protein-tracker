@@ -22,5 +22,10 @@
     "noHistory": "Noch kein Verlauf vorhanden",
     "today": "Heute",
     "settings": "Einstellungen",
-    "save": "Speichern"
+    "save": "Speichern",
+    "edit": "Bearbeiten",
+    "delete": "Löschen",
+    "editEntry": "Eintrag bearbeiten",
+    "deleteEntry": "Eintrag löschen",
+    "deleteConfirmation": "Möchten Sie diesen Eintrag wirklich löschen?"
 } 
