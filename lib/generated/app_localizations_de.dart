@@ -89,4 +89,34 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get today => 'Heute';
+
+  @override
+  String get dailyGoal => 'Tagesziel';
+
+  @override
+  String get dailyGoalHint => 'Tagesziel eingeben';
+
+  @override
+  String get noEntries => 'Noch keine Einträge';
+
+  @override
+  String get appColor => 'App-Farbe';
+
+  @override
+  String get tapToChangeColor => 'Tippen zum Ändern der Farbe';
+
+  @override
+  String get language => 'Sprache';
+
+  @override
+  String get systemDefault => 'Systemstandard';
+
+  @override
+  String get theme => 'Design';
+
+  @override
+  String get light => 'Hell';
+
+  @override
+  String get dark => 'Dunkel';
 }

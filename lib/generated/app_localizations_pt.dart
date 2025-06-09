@@ -88,4 +88,34 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get today => 'Hoje';
+
+  @override
+  String get dailyGoal => 'Meta diária';
+
+  @override
+  String get dailyGoalHint => 'Digite a meta';
+
+  @override
+  String get noEntries => 'Sem entradas';
+
+  @override
+  String get appColor => 'Cor do aplicativo';
+
+  @override
+  String get tapToChangeColor => 'Toque para mudar a cor';
+
+  @override
+  String get language => 'Idioma';
+
+  @override
+  String get systemDefault => 'Padrão do sistema';
+
+  @override
+  String get theme => 'Tema';
+
+  @override
+  String get light => 'Claro';
+
+  @override
+  String get dark => 'Escuro';
 }

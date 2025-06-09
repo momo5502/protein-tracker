@@ -1,5 +1,5 @@
 {
-  "appTitle": "プロテイン記録",
+  "appTitle": "プロテイントラッカー",
   "todayProgress": "今日の進捗",
   "progressOf": "/",
   "complete": "完了",
@@ -25,5 +25,15 @@
   "save": "保存",
   "history": "履歴",
   "noHistory": "履歴がありません",
-  "today": "今日"
+  "today": "今日",
+  "dailyGoal": "1日の目標",
+  "dailyGoalHint": "目標を入力",
+  "noEntries": "エントリーなし",
+  "appColor": "アプリの色",
+  "tapToChangeColor": "タップして色を変更",
+  "language": "言語",
+  "systemDefault": "システムデフォルト",
+  "theme": "テーマ",
+  "light": "ライト",
+  "dark": "ダーク"
 } 

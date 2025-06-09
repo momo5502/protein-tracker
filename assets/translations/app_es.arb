@@ -17,7 +17,7 @@
   "proteinSource": "Fuente de proteína",
   "proteinSourceHint": "ej. Pechuga de pollo",
   "proteinAmount": "Cantidad de proteína",
-  "proteinAmountHint": "Ingresa la cantidad",
+  "proteinAmountHint": "Ingrese la cantidad",
   "addEntry": "Añadir entrada",
   "settings": "Ajustes",
   "dailyProteinGoal": "Objetivo diario de proteínas",
@@ -25,5 +25,15 @@
   "save": "Guardar",
   "history": "Historial",
   "noHistory": "No hay historial disponible",
-  "today": "Hoy"
+  "today": "Hoy",
+  "dailyGoal": "Objetivo diario",
+  "dailyGoalHint": "Ingrese el objetivo",
+  "noEntries": "Sin entradas",
+  "appColor": "Color de la aplicación",
+  "tapToChangeColor": "Toque para cambiar el color",
+  "language": "Idioma",
+  "systemDefault": "Predeterminado del sistema",
+  "theme": "Tema",
+  "light": "Claro",
+  "dark": "Oscuro"
 } 

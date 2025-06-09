@@ -25,5 +25,15 @@
     "save": "Save",
     "history": "History",
     "noHistory": "No history available",
-    "today": "Today"
+    "today": "Today",
+    "dailyGoal": "Daily Goal",
+    "dailyGoalHint": "Enter daily goal",
+    "noEntries": "No entries yet",
+    "appColor": "App Color",
+    "tapToChangeColor": "Tap to change color",
+    "language": "Language",
+    "systemDefault": "System Default",
+    "theme": "Theme",
+    "light": "Light",
+    "dark": "Dark"
 } 

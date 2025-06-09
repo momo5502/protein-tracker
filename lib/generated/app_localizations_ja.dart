@@ -9,7 +9,7 @@ class AppLocalizationsJa extends AppLocalizations {
   AppLocalizationsJa([String locale = 'ja']) : super(locale);
 
   @override
-  String get appTitle => 'プロテイン記録';
+  String get appTitle => 'プロテイントラッカー';
 
   @override
   String get todayProgress => '今日の進捗';
@@ -88,4 +88,34 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get today => '今日';
+
+  @override
+  String get dailyGoal => '1日の目標';
+
+  @override
+  String get dailyGoalHint => '目標を入力';
+
+  @override
+  String get noEntries => 'エントリーなし';
+
+  @override
+  String get appColor => 'アプリの色';
+
+  @override
+  String get tapToChangeColor => 'タップして色を変更';
+
+  @override
+  String get language => '言語';
+
+  @override
+  String get systemDefault => 'システムデフォルト';
+
+  @override
+  String get theme => 'テーマ';
+
+  @override
+  String get light => 'ライト';
+
+  @override
+  String get dark => 'ダーク';
 }

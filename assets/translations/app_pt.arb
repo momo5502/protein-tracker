@@ -25,5 +25,15 @@
   "save": "Salvar",
   "history": "Histórico",
   "noHistory": "Nenhum histórico disponível",
-  "today": "Hoje"
+  "today": "Hoje",
+  "dailyGoal": "Meta diária",
+  "dailyGoalHint": "Digite a meta",
+  "noEntries": "Sem entradas",
+  "appColor": "Cor do aplicativo",
+  "tapToChangeColor": "Toque para mudar a cor",
+  "language": "Idioma",
+  "systemDefault": "Padrão do sistema",
+  "theme": "Tema",
+  "light": "Claro",
+  "dark": "Escuro"
 } 

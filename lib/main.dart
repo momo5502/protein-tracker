@@ -1475,7 +1475,7 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
             ),
             const SizedBox(height: 24),
             Text(
-              'App Color',
+              l10n.appColor,
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
@@ -1507,7 +1507,7 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
                     ),
                     const SizedBox(width: 16),
                     Text(
-                      'Tap to change color',
+                      l10n.tapToChangeColor,
                       style: TextStyle(
                         fontSize: 16,
                         color: colorScheme.onSurface,
@@ -1519,7 +1519,7 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
             ),
             const SizedBox(height: 24),
             Text(
-              'Language',
+              l10n.language,
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
@@ -1541,10 +1541,10 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
                 underline: const SizedBox(),
                 dropdownColor: colorScheme.surface,
                 style: TextStyle(color: colorScheme.onSurface),
-                items: const [
+                items: [
                   DropdownMenuItem(
                     value: 'system',
-                    child: Text('System Default'),
+                    child: Text(l10n.systemDefault),
                   ),
                   DropdownMenuItem(
                     value: 'en',
@@ -1589,7 +1589,7 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
             ),
             const SizedBox(height: 24),
             Text(
-              'Theme',
+              l10n.theme,
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
@@ -1611,18 +1611,18 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
                 underline: const SizedBox(),
                 dropdownColor: colorScheme.surface,
                 style: TextStyle(color: colorScheme.onSurface),
-                items: const [
+                items: [
                   DropdownMenuItem(
                     value: ThemeMode.system,
-                    child: Text('System Default'),
+                    child: Text(l10n.systemDefault),
                   ),
                   DropdownMenuItem(
                     value: ThemeMode.light,
-                    child: Text('Light'),
+                    child: Text(l10n.light),
                   ),
                   DropdownMenuItem(
                     value: ThemeMode.dark,
-                    child: Text('Dark'),
+                    child: Text(l10n.dark),
                   ),
                 ],
                 onChanged: (value) {

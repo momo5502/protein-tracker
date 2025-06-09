@@ -63,7 +63,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get proteinAmount => 'Cantidad de proteína';
 
   @override
-  String get proteinAmountHint => 'Ingresa la cantidad';
+  String get proteinAmountHint => 'Ingrese la cantidad';
 
   @override
   String get addEntry => 'Añadir entrada';
@@ -88,4 +88,34 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get today => 'Hoy';
+
+  @override
+  String get dailyGoal => 'Objetivo diario';
+
+  @override
+  String get dailyGoalHint => 'Ingrese el objetivo';
+
+  @override
+  String get noEntries => 'Sin entradas';
+
+  @override
+  String get appColor => 'Color de la aplicación';
+
+  @override
+  String get tapToChangeColor => 'Toque para cambiar el color';
+
+  @override
+  String get language => 'Idioma';
+
+  @override
+  String get systemDefault => 'Predeterminado del sistema';
+
+  @override
+  String get theme => 'Tema';
+
+  @override
+  String get light => 'Claro';
+
+  @override
+  String get dark => 'Oscuro';
 }

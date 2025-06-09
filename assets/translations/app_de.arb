@@ -25,5 +25,15 @@
     "save": "Speichern",
     "history": "Verlauf",
     "noHistory": "Kein Verlauf verfügbar",
-    "today": "Heute"
+    "today": "Heute",
+    "dailyGoal": "Tagesziel",
+    "dailyGoalHint": "Tagesziel eingeben",
+    "noEntries": "Noch keine Einträge",
+    "appColor": "App-Farbe",
+    "tapToChangeColor": "Tippen zum Ändern der Farbe",
+    "language": "Sprache",
+    "systemDefault": "Systemstandard",
+    "theme": "Design",
+    "light": "Hell",
+    "dark": "Dunkel"
 } 

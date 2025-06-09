@@ -54,7 +54,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get recentEntries => 'Inserimenti recenti';
 
   @override
-  String get proteinSource => 'Fonte proteica';
+  String get proteinSource => 'Fonte di proteine';
 
   @override
   String get proteinSourceHint => 'es. Petto di pollo';
@@ -88,4 +88,34 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get today => 'Oggi';
+
+  @override
+  String get dailyGoal => 'Obiettivo giornaliero';
+
+  @override
+  String get dailyGoalHint => 'Inserisci l\'obiettivo';
+
+  @override
+  String get noEntries => 'Nessuna voce';
+
+  @override
+  String get appColor => 'Colore dell\'app';
+
+  @override
+  String get tapToChangeColor => 'Tocca per cambiare il colore';
+
+  @override
+  String get language => 'Lingua';
+
+  @override
+  String get systemDefault => 'Predefinito di sistema';
+
+  @override
+  String get theme => 'Tema';
+
+  @override
+  String get light => 'Chiaro';
+
+  @override
+  String get dark => 'Scuro';
 }

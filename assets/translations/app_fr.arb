@@ -25,5 +25,14 @@
   "save": "Enregistrer",
   "history": "Historique",
   "noHistory": "Aucun historique disponible",
-  "today": "Aujourd'hui"
+  "today": "Aujourd'hui",
+  "dailyGoal": "Objectif quotidien",
+  "dailyGoalHint": "Entrez l'objectif",
+  "appColor": "Couleur de l'application",
+  "tapToChangeColor": "Appuyez pour changer la couleur",
+  "language": "Langue",
+  "systemDefault": "Par défaut du système",
+  "theme": "Thème",
+  "light": "Clair",
+  "dark": "Sombre"
 } 

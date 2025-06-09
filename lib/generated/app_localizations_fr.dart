@@ -88,4 +88,34 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get today => 'Aujourd\'hui';
+
+  @override
+  String get dailyGoal => 'Objectif quotidien';
+
+  @override
+  String get dailyGoalHint => 'Entrez l\'objectif';
+
+  @override
+  String get noEntries => 'No entries yet';
+
+  @override
+  String get appColor => 'Couleur de l\'application';
+
+  @override
+  String get tapToChangeColor => 'Appuyez pour changer la couleur';
+
+  @override
+  String get language => 'Langue';
+
+  @override
+  String get systemDefault => 'Par défaut du système';
+
+  @override
+  String get theme => 'Thème';
+
+  @override
+  String get light => 'Clair';
+
+  @override
+  String get dark => 'Sombre';
 }

@@ -14,7 +14,7 @@
   "entry": "Inserimento",
   "addProtein": "Aggiungi proteine",
   "recentEntries": "Inserimenti recenti",
-  "proteinSource": "Fonte proteica",
+  "proteinSource": "Fonte di proteine",
   "proteinSourceHint": "es. Petto di pollo",
   "proteinAmount": "Quantità di proteine",
   "proteinAmountHint": "Inserisci la quantità",
@@ -25,5 +25,15 @@
   "save": "Salva",
   "history": "Cronologia",
   "noHistory": "Nessuna cronologia disponibile",
-  "today": "Oggi"
+  "today": "Oggi",
+  "dailyGoal": "Obiettivo giornaliero",
+  "dailyGoalHint": "Inserisci l'obiettivo",
+  "noEntries": "Nessuna voce",
+  "appColor": "Colore dell'app",
+  "tapToChangeColor": "Tocca per cambiare il colore",
+  "language": "Lingua",
+  "systemDefault": "Predefinito di sistema",
+  "theme": "Tema",
+  "light": "Chiaro",
+  "dark": "Scuro"
 } 
