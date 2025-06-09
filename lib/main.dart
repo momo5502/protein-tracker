@@ -9,7 +9,7 @@ import 'dart:math' as math;
 
 // Custom color scheme class
 class AppColors {
-  static Color primary = Color.fromARGB(255, 20, 116, 13);
+  static Color primary = const Color.fromARGB(255, 20, 116, 13);
 
   // Light theme colors
   static ColorScheme get lightColorScheme =>
@@ -92,7 +92,7 @@ class _ProteinTrackerAppState extends State<ProteinTrackerApp> {
       title: 'Protein Tracker',
       debugShowCheckedModeBanner: false,
       locale: _locale,
-      localizationsDelegates: [
+      localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
@@ -1263,9 +1263,9 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
               ),
             ),
             const SizedBox(height: 24),
-            Text(
+            const Text(
               'App Color',
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
                 color: Colors.black87,
@@ -1305,9 +1305,9 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
               ),
             ),
             const SizedBox(height: 24),
-            Text(
+            const Text(
               'Language',
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
                 color: Colors.black87,

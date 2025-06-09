@@ -1,3 +1,6 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("kotlin-android")
@@ -30,18 +33,16 @@ android {
         versionName = flutter.versionName
     }
 
+    val keystorePropertiesFile = rootProject.file("key.properties")
     val keystoreProperties = Properties().apply {
-        val keystorePropertiesFile = rootProject.file("key.properties")
-        if (keystorePropertiesFile.exists()) {
-            load(FileInputStream(keystorePropertiesFile))
-        }
+        load(FileInputStream(keystorePropertiesFile))
     }
 
     signingConfigs {
         create("release") {
             keyAlias = keystoreProperties["keyAlias"] as String
             keyPassword = keystoreProperties["keyPassword"] as String
-            storeFile = keystoreProperties["storeFile"]?.let { file(it) }
+            storeFile = file("$rootDir/upload-keystore.jks")
             storePassword = keystoreProperties["storePassword"] as String
         }
     }
