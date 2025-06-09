@@ -918,14 +918,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: _addProteinEntry,
-        icon: const Icon(Icons.add),
-        label: Text(l10n.addProtein),
-        backgroundColor: AppColors.primary,
-        foregroundColor: Colors.white,
-        elevation: 8,
-      ),
     );
   }
 }
