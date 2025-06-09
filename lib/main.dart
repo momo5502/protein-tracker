@@ -559,19 +559,19 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           style: const TextStyle(fontWeight: FontWeight.w600),
         ),
         backgroundColor: Colors.transparent,
+        leading: IconButton(
+          icon: const Icon(Icons.history),
+          onPressed: () {
+            HapticFeedback.mediumImpact();
+            _showHistory();
+          },
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.list),
             onPressed: () {
               HapticFeedback.mediumImpact();
               _showRecipeList();
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.history),
-            onPressed: () {
-              HapticFeedback.mediumImpact();
-              _showHistory();
             },
           ),
           IconButton(
