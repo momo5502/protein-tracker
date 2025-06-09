@@ -590,6 +590,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     child: Align(
                       alignment: Alignment.topCenter,
                       child: Container(
+                        width: double.infinity,
                         margin: const EdgeInsets.symmetric(horizontal: 20),
                         padding: const EdgeInsets.all(24),
                         decoration: BoxDecoration(
