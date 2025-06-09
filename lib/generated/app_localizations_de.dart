@@ -31,7 +31,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get startTracking =>
-      'Beginnen Sie mit der Verfolgung Ihrer Proteinzufuhr';
+      'Beginnen Sie mit der Verfolgung Ihrer Proteinaufnahme';
 
   @override
   String get editEntry => 'Eintrag bearbeiten';

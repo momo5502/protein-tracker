@@ -101,6 +101,11 @@ class _ProteinTrackerAppState extends State<ProteinTrackerApp> {
       supportedLocales: const [
         Locale('en'), // English
         Locale('de'), // German
+        Locale('fr'), // French
+        Locale('es'), // Spanish
+        Locale('it'), // Italian
+        Locale('pt'), // Portuguese
+        Locale('ja'), // Japanese
       ],
       theme: ThemeData(
         useMaterial3: true,
@@ -1331,6 +1336,26 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
                   DropdownMenuItem(
                     value: 'de',
                     child: Text('Deutsch'),
+                  ),
+                  DropdownMenuItem(
+                    value: 'fr',
+                    child: Text('Français'),
+                  ),
+                  DropdownMenuItem(
+                    value: 'es',
+                    child: Text('Español'),
+                  ),
+                  DropdownMenuItem(
+                    value: 'it',
+                    child: Text('Italiano'),
+                  ),
+                  DropdownMenuItem(
+                    value: 'pt',
+                    child: Text('Português'),
+                  ),
+                  DropdownMenuItem(
+                    value: 'ja',
+                    child: Text('日本語'),
                   ),
                 ],
                 onChanged: (value) {
