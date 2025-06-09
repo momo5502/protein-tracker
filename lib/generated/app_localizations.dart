@@ -146,17 +146,47 @@ abstract class AppLocalizations {
   /// **'Start tracking your protein intake'**
   String get startTracking;
 
+  /// No description provided for @editEntry.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Entry'**
+  String get editEntry;
+
+  /// No description provided for @edit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get edit;
+
+  /// No description provided for @delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get delete;
+
+  /// No description provided for @deleteEntry.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Entry'**
+  String get deleteEntry;
+
+  /// No description provided for @entry.
+  ///
+  /// In en, this message translates to:
+  /// **'Entry'**
+  String get entry;
+
   /// No description provided for @addProtein.
   ///
   /// In en, this message translates to:
   /// **'Add Protein'**
   String get addProtein;
 
-  /// No description provided for @quickSelect.
+  /// No description provided for @recentEntries.
   ///
   /// In en, this message translates to:
-  /// **'Quick Select'**
-  String get quickSelect;
+  /// **'Recent Entries'**
+  String get recentEntries;
 
   /// No description provided for @proteinSource.
   ///
@@ -179,7 +209,7 @@ abstract class AppLocalizations {
   /// No description provided for @proteinAmountHint.
   ///
   /// In en, this message translates to:
-  /// **'e.g., 30'**
+  /// **'Enter amount'**
   String get proteinAmountHint;
 
   /// No description provided for @addEntry.
@@ -188,11 +218,11 @@ abstract class AppLocalizations {
   /// **'Add Entry'**
   String get addEntry;
 
-  /// No description provided for @setDailyGoal.
+  /// No description provided for @settings.
   ///
   /// In en, this message translates to:
-  /// **'Set Daily Goal'**
-  String get setDailyGoal;
+  /// **'Settings'**
+  String get settings;
 
   /// No description provided for @dailyProteinGoal.
   ///
@@ -206,11 +236,11 @@ abstract class AppLocalizations {
   /// **'Cancel'**
   String get cancel;
 
-  /// No description provided for @setGoal.
+  /// No description provided for @save.
   ///
   /// In en, this message translates to:
-  /// **'Set Goal'**
-  String get setGoal;
+  /// **'Save'**
+  String get save;
 
   /// No description provided for @history.
   ///
@@ -229,72 +259,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Today'**
   String get today;
-
-  /// No description provided for @settings.
-  ///
-  /// In en, this message translates to:
-  /// **'Settings'**
-  String get settings;
-
-  /// No description provided for @save.
-  ///
-  /// In en, this message translates to:
-  /// **'Save'**
-  String get save;
-
-  /// No description provided for @edit.
-  ///
-  /// In en, this message translates to:
-  /// **'Edit'**
-  String get edit;
-
-  /// No description provided for @delete.
-  ///
-  /// In en, this message translates to:
-  /// **'Delete'**
-  String get delete;
-
-  /// No description provided for @editEntry.
-  ///
-  /// In en, this message translates to:
-  /// **'Edit Entry'**
-  String get editEntry;
-
-  /// No description provided for @deleteEntry.
-  ///
-  /// In en, this message translates to:
-  /// **'Delete Entry'**
-  String get deleteEntry;
-
-  /// No description provided for @deleteConfirmation.
-  ///
-  /// In en, this message translates to:
-  /// **'Are you sure you want to delete this entry?'**
-  String get deleteConfirmation;
-
-  /// No description provided for @recentEntries.
-  ///
-  /// In en, this message translates to:
-  /// **'Recent Entries'**
-  String get recentEntries;
-
-  /// No description provided for @entry.
-  ///
-  /// In en, this message translates to:
-  /// **'Entry'**
-  String get entry;
-
-  /// No description provided for @appColor.
-  ///
-  /// In en, this message translates to:
-  /// **'App Color'**
-  String get appColor;
-
-  /// No description provided for @selectColor.
-  ///
-  /// In en, this message translates to:
-  /// **'Select a color'**
-  String get selectColor;
 }
 
 class _AppLocalizationsDelegate

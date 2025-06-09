@@ -31,13 +31,28 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get startTracking =>
-      'Beginnen Sie mit der Verfolgung Ihrer Proteinaufnahme';
+      'Beginnen Sie mit der Verfolgung Ihrer Proteinzufuhr';
+
+  @override
+  String get editEntry => 'Eintrag bearbeiten';
+
+  @override
+  String get edit => 'Bearbeiten';
+
+  @override
+  String get delete => 'Löschen';
+
+  @override
+  String get deleteEntry => 'Eintrag löschen';
+
+  @override
+  String get entry => 'Eintrag';
 
   @override
   String get addProtein => 'Protein hinzufügen';
 
   @override
-  String get quickSelect => 'Schnellauswahl';
+  String get recentEntries => 'Letzte Einträge';
 
   @override
   String get proteinSource => 'Proteinquelle';
@@ -49,13 +64,13 @@ class AppLocalizationsDe extends AppLocalizations {
   String get proteinAmount => 'Proteinmenge';
 
   @override
-  String get proteinAmountHint => 'z.B. 30';
+  String get proteinAmountHint => 'Menge eingeben';
 
   @override
   String get addEntry => 'Eintrag hinzufügen';
 
   @override
-  String get setDailyGoal => 'Tagesziel festlegen';
+  String get settings => 'Einstellungen';
 
   @override
   String get dailyProteinGoal => 'Tagesziel für Protein';
@@ -64,7 +79,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get cancel => 'Abbrechen';
 
   @override
-  String get setGoal => 'Ziel festlegen';
+  String get save => 'Speichern';
 
   @override
   String get history => 'Verlauf';
@@ -74,38 +89,4 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get today => 'Heute';
-
-  @override
-  String get settings => 'Einstellungen';
-
-  @override
-  String get save => 'Speichern';
-
-  @override
-  String get edit => 'Bearbeiten';
-
-  @override
-  String get delete => 'Löschen';
-
-  @override
-  String get editEntry => 'Eintrag bearbeiten';
-
-  @override
-  String get deleteEntry => 'Eintrag löschen';
-
-  @override
-  String get deleteConfirmation =>
-      'Möchten Sie diesen Eintrag wirklich löschen?';
-
-  @override
-  String get recentEntries => 'Letzte Einträge';
-
-  @override
-  String get entry => 'Eintrag';
-
-  @override
-  String get appColor => 'App-Farbe';
-
-  @override
-  String get selectColor => 'Farbe auswählen';
 }

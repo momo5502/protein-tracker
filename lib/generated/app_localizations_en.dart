@@ -33,10 +33,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String get startTracking => 'Start tracking your protein intake';
 
   @override
+  String get editEntry => 'Edit Entry';
+
+  @override
+  String get edit => 'Edit';
+
+  @override
+  String get delete => 'Delete';
+
+  @override
+  String get deleteEntry => 'Delete Entry';
+
+  @override
+  String get entry => 'Entry';
+
+  @override
   String get addProtein => 'Add Protein';
 
   @override
-  String get quickSelect => 'Quick Select';
+  String get recentEntries => 'Recent Entries';
 
   @override
   String get proteinSource => 'Protein Source';
@@ -48,13 +63,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get proteinAmount => 'Protein Amount';
 
   @override
-  String get proteinAmountHint => 'e.g., 30';
+  String get proteinAmountHint => 'Enter amount';
 
   @override
   String get addEntry => 'Add Entry';
 
   @override
-  String get setDailyGoal => 'Set Daily Goal';
+  String get settings => 'Settings';
 
   @override
   String get dailyProteinGoal => 'Daily Protein Goal';
@@ -63,7 +78,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cancel => 'Cancel';
 
   @override
-  String get setGoal => 'Set Goal';
+  String get save => 'Save';
 
   @override
   String get history => 'History';
@@ -73,38 +88,4 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get today => 'Today';
-
-  @override
-  String get settings => 'Settings';
-
-  @override
-  String get save => 'Save';
-
-  @override
-  String get edit => 'Edit';
-
-  @override
-  String get delete => 'Delete';
-
-  @override
-  String get editEntry => 'Edit Entry';
-
-  @override
-  String get deleteEntry => 'Delete Entry';
-
-  @override
-  String get deleteConfirmation =>
-      'Are you sure you want to delete this entry?';
-
-  @override
-  String get recentEntries => 'Recent Entries';
-
-  @override
-  String get entry => 'Entry';
-
-  @override
-  String get appColor => 'App Color';
-
-  @override
-  String get selectColor => 'Select a color';
 }
