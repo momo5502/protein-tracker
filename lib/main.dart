@@ -950,68 +950,153 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return AlertDialog(
-      title: Text(l10n.settings),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          TextField(
-            controller: _controller,
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              labelText: l10n.dailyProteinGoal,
-              border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-              suffixText: 'g',
-            ),
-          ),
-          const SizedBox(height: 16),
-          Row(
-            children: [
-              const Icon(Icons.language),
-              const SizedBox(width: 8),
-              Expanded(
-                child: DropdownButton<String>(
-                  value: _selectedLanguage,
-                  isExpanded: true,
-                  items: const [
-                    DropdownMenuItem(
-                        value: 'system', child: Text('System Default')),
-                    DropdownMenuItem(value: 'en', child: Text('English')),
-                    DropdownMenuItem(value: 'de', child: Text('Deutsch')),
-                  ],
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedLanguage = value!;
-                    });
-                    if (value == 'system') {
-                      widget.onLocaleChanged(null);
-                    } else {
-                      widget.onLocaleChanged(Locale(value!));
-                    }
-                  },
-                ),
-              ),
-            ],
-          ),
-        ],
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
       ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: Text(l10n.cancel),
+      child: Container(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  l10n.settings,
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () => Navigator.pop(context),
+                  icon: const Icon(Icons.close),
+                ),
+              ],
+            ),
+            const SizedBox(height: 24),
+            Text(
+              l10n.dailyProteinGoal,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: Colors.black87,
+              ),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: _controller,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                hintText: l10n.proteinAmountHint,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                prefixIcon: const Icon(Icons.fitness_center),
+                suffixText: 'g',
+              ),
+            ),
+            const SizedBox(height: 24),
+            Text(
+              'Language',
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: Colors.black87,
+              ),
+            ),
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey.shade300),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: DropdownButton<String>(
+                value: _selectedLanguage,
+                isExpanded: true,
+                underline: const SizedBox(),
+                items: const [
+                  DropdownMenuItem(
+                    value: 'system',
+                    child: Text('System Default'),
+                  ),
+                  DropdownMenuItem(
+                    value: 'en',
+                    child: Text('English'),
+                  ),
+                  DropdownMenuItem(
+                    value: 'de',
+                    child: Text('Deutsch'),
+                  ),
+                ],
+                onChanged: (value) {
+                  setState(() {
+                    _selectedLanguage = value!;
+                  });
+                  if (value == 'system') {
+                    widget.onLocaleChanged(null);
+                  } else {
+                    widget.onLocaleChanged(Locale(value!));
+                  }
+                },
+              ),
+            ),
+            const SizedBox(height: 24),
+            Row(
+              children: [
+                Expanded(
+                  child: TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    style: TextButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: Text(
+                      l10n.cancel,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      final goal = double.tryParse(_controller.text);
+                      if (goal != null && goal > 0) {
+                        widget.onSet(goal);
+                        Navigator.pop(context);
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primary,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: Text(
+                      l10n.save,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
-        ElevatedButton(
-          onPressed: () {
-            final goal = double.tryParse(_controller.text);
-            if (goal != null && goal > 0) {
-              widget.onSet(goal);
-              Navigator.pop(context);
-            }
-          },
-          child: Text(l10n.save),
-        ),
-      ],
+      ),
     );
   }
 }
