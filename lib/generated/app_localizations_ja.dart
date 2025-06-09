@@ -30,7 +30,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get noEntriesToday => '今日の記録はありません';
 
   @override
-  String get startTracking => 'プロテイン摂取量の記録を始めましょう';
+  String get startTracking => '最初の記録を追加しましょう';
 
   @override
   String get editEntry => '記録を編集';
@@ -57,13 +57,13 @@ class AppLocalizationsJa extends AppLocalizations {
   String get proteinSource => 'プロテイン源';
 
   @override
-  String get proteinSourceHint => '例：鶏むね肉';
+  String get proteinSourceHint => '例：鶏むね肉、プロテインシェイク';
 
   @override
   String get proteinAmount => 'プロテイン量';
 
   @override
-  String get proteinAmountHint => '量を入力';
+  String get proteinAmountHint => '例：30';
 
   @override
   String get addEntry => '記録を追加';
@@ -87,7 +87,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get noHistory => '履歴がありません';
 
   @override
-  String get today => '今日';
+  String get today => 'Today';
 
   @override
   String get dailyGoal => '1日の目標';
@@ -118,4 +118,19 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get dark => 'ダーク';
+
+  @override
+  String get recipeList => 'レシピリスト';
+
+  @override
+  String get noRecipes => 'レシピがありません';
+
+  @override
+  String get addRecipe => 'レシピを追加';
+
+  @override
+  String get recipeName => 'レシピ名';
+
+  @override
+  String get recipeNameHint => '例：鶏むね肉とご飯';
 }

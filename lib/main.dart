@@ -521,6 +521,30 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     );
   }
 
+  void _showRecipeList() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const RecipeListPage(),
+      ),
+    );
+
+    if (result != null) {
+      final entry = ProteinEntry(
+        date: DateFormat('yyyy-MM-dd').format(DateTime.now()),
+        amount: result['protein'],
+        source: result['name'],
+        timestamp: DateTime.now(),
+      );
+      setState(() {
+        _proteinEntries.add(entry);
+      });
+      _saveData();
+      _progressAnimationController.reset();
+      _progressAnimationController.forward();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -535,6 +559,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         ),
         backgroundColor: Colors.transparent,
         actions: [
+          IconButton(
+            icon: const Icon(Icons.list),
+            onPressed: () {
+              HapticFeedback.mediumImpact();
+              _showRecipeList();
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.history),
             onPressed: () {
@@ -1041,6 +1072,20 @@ class _AddProteinModalState extends State<AddProteinModal> {
     setState(() {});
   }
 
+  Future<void> _deleteCustomSource(String name) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    // Remove the source from the list
+    _customSources.removeWhere((source) => source['name'] == name);
+
+    // Save to SharedPreferences
+    final customSourcesJson =
+        _customSources.map((source) => jsonEncode(source)).toList();
+    await prefs.setStringList('custom_sources', customSourcesJson);
+
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -1100,6 +1145,157 @@ class _AddProteinModalState extends State<AddProteinModal> {
                         onTap: () {
                           _sourceController.text = source['name'];
                           _amountController.text = source['protein'].toString();
+                        },
+                        onLongPress: () {
+                          HapticFeedback.mediumImpact();
+                          showDialog(
+                            context: context,
+                            builder: (context) => Dialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Container(
+                                padding: const EdgeInsets.all(24),
+                                decoration: BoxDecoration(
+                                  color: colorScheme.surface,
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          l10n.deleteEntry,
+                                          style: TextStyle(
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.bold,
+                                            color: colorScheme.onSurface,
+                                          ),
+                                        ),
+                                        IconButton(
+                                          onPressed: () {
+                                            HapticFeedback.lightImpact();
+                                            Navigator.pop(context);
+                                          },
+                                          icon: Icon(Icons.close,
+                                              color: colorScheme.onSurface),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 24),
+                                    Container(
+                                      padding: const EdgeInsets.all(16),
+                                      decoration: BoxDecoration(
+                                        color: colorScheme.surfaceVariant,
+                                        borderRadius: BorderRadius.circular(12),
+                                        border: Border.all(
+                                            color: colorScheme.outline
+                                                .withValues(alpha: 0.5)),
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          Container(
+                                            width: 40,
+                                            height: 40,
+                                            decoration: BoxDecoration(
+                                              color: AppColors.primaryLight,
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                '${source['protein']}g',
+                                                style: TextStyle(
+                                                  color: AppColors.primary,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 16,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(width: 16),
+                                          Expanded(
+                                            child: Text(
+                                              source['name'],
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500,
+                                                color: colorScheme.onSurface,
+                                              ),
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(height: 24),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: TextButton(
+                                            onPressed: () {
+                                              HapticFeedback.lightImpact();
+                                              Navigator.pop(context);
+                                            },
+                                            style: TextButton.styleFrom(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 16),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
+                                              ),
+                                            ),
+                                            child: Text(
+                                              l10n.cancel,
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w600,
+                                                color: colorScheme.onSurface,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(width: 16),
+                                        Expanded(
+                                          child: ElevatedButton(
+                                            onPressed: () {
+                                              HapticFeedback.heavyImpact();
+                                              _deleteCustomSource(
+                                                  source['name']);
+                                              Navigator.pop(context);
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.red,
+                                              foregroundColor: Colors.white,
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 16),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
+                                              ),
+                                            ),
+                                            child: Text(
+                                              l10n.delete,
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
                         },
                         child: Container(
                           padding: const EdgeInsets.symmetric(
@@ -1826,6 +2022,335 @@ class HistoryPage extends StatelessWidget {
                 );
               },
             ),
+    );
+  }
+}
+
+class RecipeListPage extends StatefulWidget {
+  const RecipeListPage({super.key});
+
+  @override
+  State<RecipeListPage> createState() => _RecipeListPageState();
+}
+
+class _RecipeListPageState extends State<RecipeListPage> {
+  List<Map<String, dynamic>> _recipes = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadRecipes();
+  }
+
+  Future<void> _loadRecipes() async {
+    final prefs = await SharedPreferences.getInstance();
+    final recipesJson = prefs.getStringList('recipes') ?? [];
+    setState(() {
+      _recipes = recipesJson
+          .map((json) => Map<String, dynamic>.from(jsonDecode(json)))
+          .toList();
+    });
+  }
+
+  Future<void> _saveRecipes() async {
+    final prefs = await SharedPreferences.getInstance();
+    final recipesJson = _recipes.map((recipe) => jsonEncode(recipe)).toList();
+    await prefs.setStringList('recipes', recipesJson);
+  }
+
+  void _addRecipe() {
+    HapticFeedback.mediumImpact();
+    showDialog(
+      context: context,
+      builder: (context) => AddRecipeDialog(
+        onAdd: (name, protein) async {
+          setState(() {
+            _recipes.add({
+              'name': name,
+              'protein': protein,
+            });
+          });
+          await _saveRecipes();
+        },
+      ),
+    );
+  }
+
+  void _deleteRecipe(int index) {
+    HapticFeedback.heavyImpact();
+    setState(() {
+      _recipes.removeAt(index);
+    });
+    _saveRecipes();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(l10n.recipeList),
+        backgroundColor: Colors.transparent,
+      ),
+      body: _recipes.isEmpty
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.restaurant_menu,
+                    size: 64,
+                    color: colorScheme.onSurface.withValues(alpha: 0.4),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    l10n.noRecipes,
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: colorScheme.onSurface.withValues(alpha: 0.6),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          : ListView.builder(
+              padding: const EdgeInsets.all(16),
+              itemCount: _recipes.length,
+              itemBuilder: (context, index) {
+                final recipe = _recipes[index];
+                return Dismissible(
+                  key: Key(recipe['name']),
+                  direction: DismissDirection.endToStart,
+                  background: Container(
+                    alignment: Alignment.centerRight,
+                    padding: const EdgeInsets.only(right: 20),
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: const Icon(
+                      Icons.delete,
+                      color: Colors.white,
+                    ),
+                  ),
+                  onDismissed: (direction) => _deleteRecipe(index),
+                  child: Container(
+                    margin: const EdgeInsets.only(bottom: 12),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? colorScheme.surfaceVariant
+                          : Color.lerp(colorScheme.surface, Colors.white, 0.7),
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: colorScheme.shadow.withValues(alpha: 0.05),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: ListTile(
+                      title: Text(
+                        recipe['name'],
+                        style: const TextStyle(fontWeight: FontWeight.w600),
+                      ),
+                      trailing: Text(
+                        '${recipe['protein']}g',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.primary,
+                        ),
+                      ),
+                      onTap: () {
+                        HapticFeedback.mediumImpact();
+                        Navigator.pop(context, recipe);
+                      },
+                    ),
+                  ),
+                );
+              },
+            ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _addRecipe,
+        backgroundColor: AppColors.primary,
+        child: const Icon(Icons.add, color: Colors.white),
+      ),
+    );
+  }
+}
+
+class AddRecipeDialog extends StatefulWidget {
+  final Function(String, int) onAdd;
+
+  const AddRecipeDialog({super.key, required this.onAdd});
+
+  @override
+  State<AddRecipeDialog> createState() => _AddRecipeDialogState();
+}
+
+class _AddRecipeDialogState extends State<AddRecipeDialog> {
+  final _nameController = TextEditingController();
+  final _proteinController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Container(
+        padding: const EdgeInsets.all(24),
+        decoration: BoxDecoration(
+          color: colorScheme.surface,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  l10n.addRecipe,
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: colorScheme.onSurface,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    HapticFeedback.lightImpact();
+                    Navigator.pop(context);
+                  },
+                  icon: Icon(Icons.close, color: colorScheme.onSurface),
+                ),
+              ],
+            ),
+            const SizedBox(height: 24),
+            TextField(
+              controller: _nameController,
+              style: TextStyle(color: colorScheme.onSurface),
+              decoration: InputDecoration(
+                labelText: l10n.recipeName,
+                hintText: l10n.recipeNameHint,
+                labelStyle: TextStyle(
+                    color: colorScheme.onSurface.withValues(alpha: 0.7)),
+                hintStyle: TextStyle(
+                    color: colorScheme.onSurface.withValues(alpha: 0.5)),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                prefixIcon: Icon(Icons.restaurant_menu,
+                    color: colorScheme.onSurface.withValues(alpha: 0.7)),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(
+                      color: colorScheme.outline.withValues(alpha: 0.5)),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: AppColors.primary),
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: _proteinController,
+              style: TextStyle(color: colorScheme.onSurface),
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                labelText: l10n.proteinAmount,
+                hintText: l10n.proteinAmountHint,
+                labelStyle: TextStyle(
+                    color: colorScheme.onSurface.withValues(alpha: 0.7)),
+                hintStyle: TextStyle(
+                    color: colorScheme.onSurface.withValues(alpha: 0.5)),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                prefixIcon: Icon(Icons.fitness_center,
+                    color: colorScheme.onSurface.withValues(alpha: 0.7)),
+                suffixText: 'g',
+                suffixStyle: TextStyle(
+                    color: colorScheme.onSurface.withValues(alpha: 0.7)),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(
+                      color: colorScheme.outline.withValues(alpha: 0.5)),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: AppColors.primary),
+                ),
+              ),
+            ),
+            const SizedBox(height: 24),
+            Row(
+              children: [
+                Expanded(
+                  child: TextButton(
+                    onPressed: () {
+                      HapticFeedback.lightImpact();
+                      Navigator.pop(context);
+                    },
+                    style: TextButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: Text(
+                      l10n.cancel,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: colorScheme.onSurface,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      HapticFeedback.mediumImpact();
+                      final name = _nameController.text.trim();
+                      final protein = int.tryParse(_proteinController.text);
+                      if (name.isNotEmpty && protein != null && protein > 0) {
+                        widget.onAdd(name, protein);
+                        Navigator.pop(context);
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primary,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: Text(
+                      l10n.add,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

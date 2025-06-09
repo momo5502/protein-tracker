@@ -30,7 +30,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noEntriesToday => 'No entries today';
 
   @override
-  String get startTracking => 'Start tracking your protein intake';
+  String get startTracking => 'Add your first entry';
 
   @override
   String get editEntry => 'Edit Entry';
@@ -57,13 +57,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get proteinSource => 'Protein Source';
 
   @override
-  String get proteinSourceHint => 'e.g., Chicken Breast';
+  String get proteinSourceHint => 'e.g. Chicken Breast, Protein Shake';
 
   @override
   String get proteinAmount => 'Protein Amount';
 
   @override
-  String get proteinAmountHint => 'Enter amount';
+  String get proteinAmountHint => 'e.g. 30';
 
   @override
   String get addEntry => 'Add Entry';
@@ -118,4 +118,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dark => 'Dark';
+
+  @override
+  String get recipeList => 'Recipe List';
+
+  @override
+  String get noRecipes => 'No recipes available';
+
+  @override
+  String get addRecipe => 'Add Recipe';
+
+  @override
+  String get recipeName => 'Recipe Name';
+
+  @override
+  String get recipeNameHint => 'e.g. Chicken Breast with Rice';
 }

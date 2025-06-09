@@ -6,7 +6,7 @@
     "todayEntries": "Today's Entries",
     "add": "Add",
     "noEntriesToday": "No entries today",
-    "startTracking": "Start tracking your protein intake",
+    "startTracking": "Add your first entry",
     "editEntry": "Edit Entry",
     "edit": "Edit",
     "delete": "Delete",
@@ -15,9 +15,9 @@
     "addProtein": "Add Protein",
     "recentEntries": "Recent Entries",
     "proteinSource": "Protein Source",
-    "proteinSourceHint": "e.g., Chicken Breast",
+    "proteinSourceHint": "e.g. Chicken Breast, Protein Shake",
     "proteinAmount": "Protein Amount",
-    "proteinAmountHint": "Enter amount",
+    "proteinAmountHint": "e.g. 30",
     "addEntry": "Add Entry",
     "settings": "Settings",
     "dailyProteinGoal": "Daily Protein Goal",
@@ -35,5 +35,10 @@
     "systemDefault": "System Default",
     "theme": "Theme",
     "light": "Light",
-    "dark": "Dark"
+    "dark": "Dark",
+    "recipeList": "Recipe List",
+    "noRecipes": "No recipes available",
+    "addRecipe": "Add Recipe",
+    "recipeName": "Recipe Name",
+    "recipeNameHint": "e.g. Chicken Breast with Rice"
 } 

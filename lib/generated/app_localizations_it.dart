@@ -118,4 +118,19 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get dark => 'Scuro';
+
+  @override
+  String get recipeList => 'Lista Ricette';
+
+  @override
+  String get noRecipes => 'Nessuna ricetta disponibile';
+
+  @override
+  String get addRecipe => 'Aggiungi Ricetta';
+
+  @override
+  String get recipeName => 'Nome della Ricetta';
+
+  @override
+  String get recipeNameHint => 'es. Petto di Pollo con Riso';
 }

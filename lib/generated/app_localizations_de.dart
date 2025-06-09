@@ -30,8 +30,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get noEntriesToday => 'Keine Einträge heute';
 
   @override
-  String get startTracking =>
-      'Beginnen Sie mit der Verfolgung Ihrer Proteinaufnahme';
+  String get startTracking => 'Füge deinen ersten Eintrag hinzu';
 
   @override
   String get editEntry => 'Eintrag bearbeiten';
@@ -58,13 +57,13 @@ class AppLocalizationsDe extends AppLocalizations {
   String get proteinSource => 'Proteinquelle';
 
   @override
-  String get proteinSourceHint => 'z.B. Hähnchenbrust';
+  String get proteinSourceHint => 'z.B. Hühnerbrust, Protein-Shake';
 
   @override
   String get proteinAmount => 'Proteinmenge';
 
   @override
-  String get proteinAmountHint => 'Menge eingeben';
+  String get proteinAmountHint => 'z.B. 30';
 
   @override
   String get addEntry => 'Eintrag hinzufügen';
@@ -73,7 +72,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get settings => 'Einstellungen';
 
   @override
-  String get dailyProteinGoal => 'Tagesziel für Protein';
+  String get dailyProteinGoal => 'Tägliches Proteinziel';
 
   @override
   String get cancel => 'Abbrechen';
@@ -85,7 +84,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get history => 'Verlauf';
 
   @override
-  String get noHistory => 'Kein Verlauf verfügbar';
+  String get noHistory => 'Kein Verlauf vorhanden';
 
   @override
   String get today => 'Heute';
@@ -119,4 +118,19 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get dark => 'Dunkel';
+
+  @override
+  String get recipeList => 'Rezeptliste';
+
+  @override
+  String get noRecipes => 'Keine Rezepte vorhanden';
+
+  @override
+  String get addRecipe => 'Rezept hinzufügen';
+
+  @override
+  String get recipeName => 'Rezeptname';
+
+  @override
+  String get recipeNameHint => 'z.B. Hühnerbrust mit Reis';
 }

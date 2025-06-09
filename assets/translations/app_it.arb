@@ -35,5 +35,10 @@
   "systemDefault": "Predefinito di sistema",
   "theme": "Tema",
   "light": "Chiaro",
-  "dark": "Scuro"
+  "dark": "Scuro",
+  "recipeList": "Lista Ricette",
+  "noRecipes": "Nessuna ricetta disponibile",
+  "addRecipe": "Aggiungi Ricetta",
+  "recipeName": "Nome della Ricetta",
+  "recipeNameHint": "es. Petto di Pollo con Riso"
 } 

@@ -153,7 +153,7 @@ abstract class AppLocalizations {
   /// No description provided for @startTracking.
   ///
   /// In en, this message translates to:
-  /// **'Start tracking your protein intake'**
+  /// **'Add your first entry'**
   String get startTracking;
 
   /// No description provided for @editEntry.
@@ -207,7 +207,7 @@ abstract class AppLocalizations {
   /// No description provided for @proteinSourceHint.
   ///
   /// In en, this message translates to:
-  /// **'e.g., Chicken Breast'**
+  /// **'e.g. Chicken Breast, Protein Shake'**
   String get proteinSourceHint;
 
   /// No description provided for @proteinAmount.
@@ -219,7 +219,7 @@ abstract class AppLocalizations {
   /// No description provided for @proteinAmountHint.
   ///
   /// In en, this message translates to:
-  /// **'Enter amount'**
+  /// **'e.g. 30'**
   String get proteinAmountHint;
 
   /// No description provided for @addEntry.
@@ -329,6 +329,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Dark'**
   String get dark;
+
+  /// No description provided for @recipeList.
+  ///
+  /// In en, this message translates to:
+  /// **'Recipe List'**
+  String get recipeList;
+
+  /// No description provided for @noRecipes.
+  ///
+  /// In en, this message translates to:
+  /// **'No recipes available'**
+  String get noRecipes;
+
+  /// No description provided for @addRecipe.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Recipe'**
+  String get addRecipe;
+
+  /// No description provided for @recipeName.
+  ///
+  /// In en, this message translates to:
+  /// **'Recipe Name'**
+  String get recipeName;
+
+  /// No description provided for @recipeNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Chicken Breast with Rice'**
+  String get recipeNameHint;
 }
 
 class _AppLocalizationsDelegate
