@@ -546,7 +546,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   padding: const EdgeInsets.all(24),
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
-                      colors: [_progressColor.withOpacity(0.8), _progressColor],
+                      colors: [
+                        Color.lerp(Colors.white, _progressColor, 0.8)!,
+                        _progressColor,
+                        Color.lerp(Colors.black, _progressColor, 0.8)!
+                      ],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     ),
