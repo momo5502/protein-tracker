@@ -28,15 +28,51 @@ void main() {
   runApp(const ProteinTrackerApp());
 }
 
-class ProteinTrackerApp extends StatelessWidget {
+class ProteinTrackerApp extends StatefulWidget {
   const ProteinTrackerApp({super.key});
+
+  @override
+  State<ProteinTrackerApp> createState() => _ProteinTrackerAppState();
+}
+
+class _ProteinTrackerAppState extends State<ProteinTrackerApp> {
+  Locale? _locale;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadLocale();
+  }
+
+  Future<void> _loadLocale() async {
+    final prefs = await SharedPreferences.getInstance();
+    final localeCode = prefs.getString('locale');
+    if (localeCode != null) {
+      setState(() {
+        _locale = Locale(localeCode);
+      });
+    }
+  }
+
+  Future<void> setLocale(Locale? locale) async {
+    final prefs = await SharedPreferences.getInstance();
+    if (locale != null) {
+      await prefs.setString('locale', locale.languageCode);
+    } else {
+      await prefs.remove('locale');
+    }
+    setState(() {
+      _locale = locale;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Protein Tracker',
       debugShowCheckedModeBanner: false,
-      localizationsDelegates: const [
+      locale: _locale,
+      localizationsDelegates: [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
@@ -56,7 +92,7 @@ class ProteinTrackerApp extends StatelessWidget {
           scrolledUnderElevation: 0,
         ),
       ),
-      home: const HomePage(),
+      home: HomePage(onLocaleChanged: setLocale, currentLocale: _locale),
     );
   }
 }
@@ -90,7 +126,11 @@ class ProteinEntry {
 }
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final Function(Locale?) onLocaleChanged;
+  final Locale? currentLocale;
+
+  const HomePage(
+      {super.key, required this.onLocaleChanged, required this.currentLocale});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -206,6 +246,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           });
           _saveData();
         },
+        onLocaleChanged: widget.onLocaleChanged,
+        currentLocale: widget.currentLocale,
       ),
     );
   }
@@ -676,11 +718,15 @@ class _AddProteinModalState extends State<AddProteinModal> {
 class SetGoalDialog extends StatefulWidget {
   final double currentGoal;
   final Function(double) onSet;
+  final Function(Locale?) onLocaleChanged;
+  final Locale? currentLocale;
 
   const SetGoalDialog({
     super.key,
     required this.currentGoal,
     required this.onSet,
+    required this.onLocaleChanged,
+    required this.currentLocale,
   });
 
   @override
@@ -689,6 +735,7 @@ class SetGoalDialog extends StatefulWidget {
 
 class _SetGoalDialogState extends State<SetGoalDialog> {
   late TextEditingController _controller;
+  late String _selectedLanguage;
 
   @override
   void initState() {
@@ -696,22 +743,57 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
     _controller = TextEditingController(
       text: widget.currentGoal.toInt().toString(),
     );
+    _selectedLanguage = widget.currentLocale?.languageCode ?? 'system';
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-
     return AlertDialog(
-      title: Text(l10n.setDailyGoal),
-      content: TextField(
-        controller: _controller,
-        keyboardType: TextInputType.number,
-        decoration: InputDecoration(
-          labelText: l10n.dailyProteinGoal,
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-          suffixText: 'g',
-        ),
+      title: Text(l10n.settings),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          TextField(
+            controller: _controller,
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(
+              labelText: l10n.dailyProteinGoal,
+              border:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+              suffixText: 'g',
+            ),
+          ),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              const Icon(Icons.language),
+              const SizedBox(width: 8),
+              Expanded(
+                child: DropdownButton<String>(
+                  value: _selectedLanguage,
+                  isExpanded: true,
+                  items: const [
+                    DropdownMenuItem(
+                        value: 'system', child: Text('System Default')),
+                    DropdownMenuItem(value: 'en', child: Text('English')),
+                    DropdownMenuItem(value: 'de', child: Text('Deutsch')),
+                  ],
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedLanguage = value!;
+                    });
+                    if (value == 'system') {
+                      widget.onLocaleChanged(null);
+                    } else {
+                      widget.onLocaleChanged(Locale(value!));
+                    }
+                  },
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
       actions: [
         TextButton(
@@ -726,7 +808,7 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
               Navigator.pop(context);
             }
           },
-          child: Text(l10n.setGoal),
+          child: Text(l10n.save),
         ),
       ],
     );

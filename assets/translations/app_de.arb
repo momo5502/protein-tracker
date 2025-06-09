@@ -20,5 +20,7 @@
     "setGoal": "Ziel festlegen",
     "history": "Verlauf",
     "noHistory": "Noch kein Verlauf vorhanden",
-    "today": "Heute"
+    "today": "Heute",
+    "settings": "Einstellungen",
+    "save": "Speichern"
 } 

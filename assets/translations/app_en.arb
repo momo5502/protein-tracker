@@ -20,5 +20,7 @@
     "setGoal": "Set Goal",
     "history": "History",
     "noHistory": "No history yet",
-    "today": "Today"
+    "today": "Today",
+    "settings": "Settings",
+    "save": "Save"
 } 

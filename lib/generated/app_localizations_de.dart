@@ -74,4 +74,10 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get today => 'Heute';
+
+  @override
+  String get settings => 'Einstellungen';
+
+  @override
+  String get save => 'Speichern';
 }
