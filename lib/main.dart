@@ -1455,6 +1455,8 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide(color: AppColors.primary),
                 ),
+                filled: true,
+                fillColor: colorScheme.surface,
               ),
             ),
             const SizedBox(height: 24),
@@ -1472,7 +1474,7 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
               child: Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: colorScheme.surfaceVariant,
+                  color: colorScheme.surface,
                   borderRadius: BorderRadius.circular(12),
                   border:
                       Border.all(color: colorScheme.outline.withOpacity(0.5)),
@@ -1494,7 +1496,7 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
                       'Tap to change color',
                       style: TextStyle(
                         fontSize: 16,
-                        color: colorScheme.onSurfaceVariant,
+                        color: colorScheme.onSurface,
                       ),
                     ),
                   ],
@@ -1514,7 +1516,7 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12),
               decoration: BoxDecoration(
-                color: colorScheme.surfaceVariant,
+                color: colorScheme.surface,
                 border: Border.all(color: colorScheme.outline.withOpacity(0.5)),
                 borderRadius: BorderRadius.circular(12),
               ),
@@ -1522,8 +1524,8 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
                 value: _selectedLanguage,
                 isExpanded: true,
                 underline: const SizedBox(),
-                dropdownColor: colorScheme.surfaceVariant,
-                style: TextStyle(color: colorScheme.onSurfaceVariant),
+                dropdownColor: colorScheme.surface,
+                style: TextStyle(color: colorScheme.onSurface),
                 items: const [
                   DropdownMenuItem(
                     value: 'system',
@@ -1583,7 +1585,7 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12),
               decoration: BoxDecoration(
-                color: colorScheme.surfaceVariant,
+                color: colorScheme.surface,
                 border: Border.all(color: colorScheme.outline.withOpacity(0.5)),
                 borderRadius: BorderRadius.circular(12),
               ),
@@ -1591,8 +1593,8 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
                 value: _selectedThemeMode,
                 isExpanded: true,
                 underline: const SizedBox(),
-                dropdownColor: colorScheme.surfaceVariant,
-                style: TextStyle(color: colorScheme.onSurfaceVariant),
+                dropdownColor: colorScheme.surface,
+                style: TextStyle(color: colorScheme.onSurface),
                 items: const [
                   DropdownMenuItem(
                     value: ThemeMode.system,
