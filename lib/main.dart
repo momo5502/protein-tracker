@@ -16,8 +16,18 @@ class AppColors {
       ColorScheme.fromSeed(seedColor: primary, brightness: Brightness.light);
 
   // Dark theme colors
-  static ColorScheme get darkColorScheme =>
-      ColorScheme.fromSeed(seedColor: primary, brightness: Brightness.dark);
+  static ColorScheme get darkColorScheme => ColorScheme.fromSeed(
+        seedColor: primary,
+        brightness: Brightness.dark,
+        surface: const Color(0xFF1E1E1E), // Slightly brighter than default dark
+        background:
+            const Color(0xFF242424), // Slightly brighter than default dark
+        surfaceVariant:
+            const Color(0xFF2C2C2C), // Slightly brighter than default dark
+        onSurface: const Color(0xFFE0E0E0), // Slightly dimmer than pure white
+        onBackground:
+            const Color(0xFFE0E0E0), // Slightly dimmer than pure white
+      );
 
   // Common color variations
   static Color get primaryLight => primary.withOpacity(0.1);
@@ -38,12 +48,14 @@ class ProteinTrackerApp extends StatefulWidget {
 
 class _ProteinTrackerAppState extends State<ProteinTrackerApp> {
   Locale? _locale;
+  ThemeMode _themeMode = ThemeMode.system;
 
   @override
   void initState() {
     super.initState();
     _loadLocale();
     _loadColor();
+    _loadThemeMode();
   }
 
   Future<void> _loadLocale() async {
@@ -66,6 +78,14 @@ class _ProteinTrackerAppState extends State<ProteinTrackerApp> {
     }
   }
 
+  Future<void> _loadThemeMode() async {
+    final prefs = await SharedPreferences.getInstance();
+    final themeModeIndex = prefs.getInt('theme_mode') ?? ThemeMode.system.index;
+    setState(() {
+      _themeMode = ThemeMode.values[themeModeIndex];
+    });
+  }
+
   Future<void> setLocale(Locale? locale) async {
     final prefs = await SharedPreferences.getInstance();
     if (locale != null) {
@@ -86,12 +106,41 @@ class _ProteinTrackerAppState extends State<ProteinTrackerApp> {
     });
   }
 
+  Future<void> setThemeMode(ThemeMode mode) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('theme_mode', mode.index);
+    setState(() {
+      _themeMode = mode;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Protein Tracker',
       debugShowCheckedModeBanner: false,
       locale: _locale,
+      themeMode: _themeMode,
+      theme: ThemeData(
+        useMaterial3: true,
+        colorScheme: AppColors.lightColorScheme,
+        fontFamily: 'SF Pro Display',
+        appBarTheme: const AppBarTheme(
+          centerTitle: true,
+          elevation: 0,
+          scrolledUnderElevation: 0,
+        ),
+      ),
+      darkTheme: ThemeData(
+        useMaterial3: true,
+        colorScheme: AppColors.darkColorScheme,
+        fontFamily: 'SF Pro Display',
+        appBarTheme: const AppBarTheme(
+          centerTitle: true,
+          elevation: 0,
+          scrolledUnderElevation: 0,
+        ),
+      ),
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
@@ -107,20 +156,13 @@ class _ProteinTrackerAppState extends State<ProteinTrackerApp> {
         Locale('pt'), // Portuguese
         Locale('ja'), // Japanese
       ],
-      theme: ThemeData(
-        useMaterial3: true,
-        colorScheme: AppColors.lightColorScheme,
-        fontFamily: 'SF Pro Display',
-        appBarTheme: const AppBarTheme(
-          centerTitle: true,
-          elevation: 0,
-          scrolledUnderElevation: 0,
-        ),
-      ),
       home: HomePage(
-          onLocaleChanged: setLocale,
-          onColorChanged: setColor,
-          currentLocale: _locale),
+        onLocaleChanged: setLocale,
+        onColorChanged: setColor,
+        onThemeModeChanged: setThemeMode,
+        currentLocale: _locale,
+        currentThemeMode: _themeMode,
+      ),
     );
   }
 }
@@ -156,13 +198,17 @@ class ProteinEntry {
 class HomePage extends StatefulWidget {
   final Function(Locale?) onLocaleChanged;
   final Function(Color) onColorChanged;
+  final Function(ThemeMode) onThemeModeChanged;
   final Locale? currentLocale;
+  final ThemeMode currentThemeMode;
 
   const HomePage({
     super.key,
     required this.onLocaleChanged,
     required this.onColorChanged,
+    required this.onThemeModeChanged,
     required this.currentLocale,
+    required this.currentThemeMode,
   });
 
   @override
@@ -281,7 +327,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         },
         onLocaleChanged: widget.onLocaleChanged,
         onColorChanged: widget.onColorChanged,
+        onThemeModeChanged: widget.onThemeModeChanged,
         currentLocale: widget.currentLocale,
+        currentThemeMode: widget.currentThemeMode,
       ),
     );
   }
@@ -459,9 +507,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: colorScheme.surface,
       appBar: AppBar(
         title: Text(
           l10n.appTitle,
@@ -569,10 +618,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   children: [
                     Text(
                       l10n.todayEntries,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black87,
+                        color: colorScheme.onSurface,
                       ),
                     ),
                     TextButton.icon(
@@ -599,11 +648,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         margin: const EdgeInsets.symmetric(horizontal: 20),
                         padding: const EdgeInsets.all(24),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: colorScheme.surface,
                           borderRadius: BorderRadius.circular(16),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.05),
+                              color: colorScheme.shadow.withOpacity(0.05),
                               blurRadius: 10,
                               offset: const Offset(0, 4),
                             ),
@@ -616,7 +665,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                             Icon(
                               Icons.restaurant_menu,
                               size: 48,
-                              color: Colors.grey[400],
+                              color: colorScheme.onSurface.withOpacity(0.4),
                             ),
                             const SizedBox(height: 16),
                             Text(
@@ -624,7 +673,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w600,
-                                color: Colors.grey[600],
+                                color: colorScheme.onSurface.withOpacity(0.6),
                               ),
                             ),
                             const SizedBox(height: 8),
@@ -632,7 +681,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                               l10n.startTracking,
                               style: TextStyle(
                                 fontSize: 14,
-                                color: Colors.grey[500],
+                                color: colorScheme.onSurface.withOpacity(0.5),
                               ),
                             ),
                           ],
@@ -655,9 +704,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                               backgroundColor: Colors.transparent,
                               builder: (context) => Container(
                                 padding: const EdgeInsets.all(24),
-                                decoration: const BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.vertical(
+                                decoration: BoxDecoration(
+                                  color: colorScheme.surface,
+                                  borderRadius: const BorderRadius.vertical(
                                       top: Radius.circular(20)),
                                 ),
                                 child: Column(
@@ -670,9 +719,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                       children: [
                                         Text(
                                           l10n.editEntry,
-                                          style: const TextStyle(
+                                          style: TextStyle(
                                             fontSize: 24,
                                             fontWeight: FontWeight.bold,
+                                            color: colorScheme.onSurface,
                                           ),
                                         ),
                                         IconButton(
@@ -699,9 +749,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                       ),
                                       title: Text(
                                         l10n.edit,
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                           fontSize: 18,
                                           fontWeight: FontWeight.w500,
+                                          color: colorScheme.onSurface,
                                         ),
                                       ),
                                       onTap: () {
@@ -746,11 +797,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           child: Container(
                             padding: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
-                              color: Colors.white,
+                              color: colorScheme.surface,
                               borderRadius: BorderRadius.circular(12),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.black.withOpacity(0.05),
+                                  color: colorScheme.shadow.withOpacity(0.05),
                                   blurRadius: 8,
                                   offset: const Offset(0, 2),
                                 ),
@@ -776,16 +827,18 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                         entry.source.isEmpty
                                             ? l10n.entry
                                             : entry.source,
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                           fontWeight: FontWeight.w600,
                                           fontSize: 16,
+                                          color: colorScheme.onSurface,
                                         ),
                                       ),
                                       Text(
                                         DateFormat('h:mm a')
                                             .format(entry.timestamp),
                                         style: TextStyle(
-                                          color: Colors.grey[600],
+                                          color: colorScheme.onSurface
+                                              .withOpacity(0.6),
                                           fontSize: 14,
                                         ),
                                       ),
@@ -944,6 +997,7 @@ class _AddProteinModalState extends State<AddProteinModal> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Container(
       padding: EdgeInsets.only(
@@ -951,9 +1005,9 @@ class _AddProteinModalState extends State<AddProteinModal> {
       ),
       child: Container(
         padding: const EdgeInsets.all(24),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        decoration: BoxDecoration(
+          color: colorScheme.surface,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -964,12 +1018,15 @@ class _AddProteinModalState extends State<AddProteinModal> {
               children: [
                 Text(
                   l10n.addProtein,
-                  style: const TextStyle(
-                      fontSize: 24, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: colorScheme.onSurface,
+                  ),
                 ),
                 IconButton(
                   onPressed: () => Navigator.pop(context),
-                  icon: const Icon(Icons.close),
+                  icon: Icon(Icons.close, color: colorScheme.onSurface),
                 ),
               ],
             ),
@@ -977,10 +1034,10 @@ class _AddProteinModalState extends State<AddProteinModal> {
             if (_customSources.isNotEmpty) ...[
               Text(
                 l10n.recentEntries,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: Colors.black87,
+                  color: colorScheme.onSurface,
                 ),
               ),
               const SizedBox(height: 12),
@@ -1020,27 +1077,59 @@ class _AddProteinModalState extends State<AddProteinModal> {
             ],
             TextField(
               controller: _sourceController,
+              style: TextStyle(color: colorScheme.onSurface),
               decoration: InputDecoration(
                 labelText: l10n.proteinSource,
                 hintText: l10n.proteinSourceHint,
+                labelStyle:
+                    TextStyle(color: colorScheme.onSurface.withOpacity(0.7)),
+                hintStyle:
+                    TextStyle(color: colorScheme.onSurface.withOpacity(0.5)),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
-                prefixIcon: const Icon(Icons.restaurant_menu),
+                prefixIcon: Icon(Icons.restaurant_menu,
+                    color: colorScheme.onSurface.withOpacity(0.7)),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide:
+                      BorderSide(color: colorScheme.outline.withOpacity(0.5)),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: AppColors.primary),
+                ),
               ),
             ),
             const SizedBox(height: 16),
             TextField(
               controller: _amountController,
+              style: TextStyle(color: colorScheme.onSurface),
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 labelText: l10n.proteinAmount,
                 hintText: l10n.proteinAmountHint,
+                labelStyle:
+                    TextStyle(color: colorScheme.onSurface.withOpacity(0.7)),
+                hintStyle:
+                    TextStyle(color: colorScheme.onSurface.withOpacity(0.5)),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
-                prefixIcon: const Icon(Icons.fitness_center),
+                prefixIcon: Icon(Icons.fitness_center,
+                    color: colorScheme.onSurface.withOpacity(0.7)),
                 suffixText: 'g',
+                suffixStyle:
+                    TextStyle(color: colorScheme.onSurface.withOpacity(0.7)),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide:
+                      BorderSide(color: colorScheme.outline.withOpacity(0.5)),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: AppColors.primary),
+                ),
               ),
             ),
             const SizedBox(height: 24),
@@ -1070,7 +1159,9 @@ class _AddProteinModalState extends State<AddProteinModal> {
                 child: Text(
                   l10n.addEntry,
                   style: const TextStyle(
-                      fontSize: 16, fontWeight: FontWeight.w600),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
             ),
@@ -1087,7 +1178,9 @@ class SetGoalDialog extends StatefulWidget {
   final Function(double) onSet;
   final Function(Locale?) onLocaleChanged;
   final Function(Color) onColorChanged;
+  final Function(ThemeMode) onThemeModeChanged;
   final Locale? currentLocale;
+  final ThemeMode currentThemeMode;
 
   const SetGoalDialog({
     super.key,
@@ -1095,7 +1188,9 @@ class SetGoalDialog extends StatefulWidget {
     required this.onSet,
     required this.onLocaleChanged,
     required this.onColorChanged,
+    required this.onThemeModeChanged,
     required this.currentLocale,
+    required this.currentThemeMode,
   });
 
   @override
@@ -1106,6 +1201,7 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
   late TextEditingController _controller;
   late String _selectedLanguage;
   Color _selectedColor = AppColors.primary;
+  ThemeMode _selectedThemeMode = ThemeMode.system;
 
   @override
   void initState() {
@@ -1115,6 +1211,7 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
     );
     _selectedLanguage = widget.currentLocale?.languageCode ?? 'system';
     _selectedColor = AppColors.primary;
+    _selectedThemeMode = widget.currentThemeMode;
   }
 
   void _showColorPicker() {
@@ -1367,6 +1464,48 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
                   } else {
                     widget.onLocaleChanged(Locale(value!));
                   }
+                },
+              ),
+            ),
+            const SizedBox(height: 24),
+            const Text(
+              'Theme',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: Colors.black87,
+              ),
+            ),
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey.shade300),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: DropdownButton<ThemeMode>(
+                value: _selectedThemeMode,
+                isExpanded: true,
+                underline: const SizedBox(),
+                items: const [
+                  DropdownMenuItem(
+                    value: ThemeMode.system,
+                    child: Text('System Default'),
+                  ),
+                  DropdownMenuItem(
+                    value: ThemeMode.light,
+                    child: Text('Light'),
+                  ),
+                  DropdownMenuItem(
+                    value: ThemeMode.dark,
+                    child: Text('Dark'),
+                  ),
+                ],
+                onChanged: (value) {
+                  setState(() {
+                    _selectedThemeMode = value!;
+                  });
+                  widget.onThemeModeChanged(value!);
                 },
               ),
             ),
