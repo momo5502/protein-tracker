@@ -6,7 +6,7 @@ import 'dart:math' as math;
 
 // Custom color scheme class
 class AppColors {
-  static const Color primary = Color(0xFF6366F1);
+  static const Color primary = Color.fromARGB(255, 20, 116, 13);
 
   // Light theme colors
   static ColorScheme get lightColorScheme =>
