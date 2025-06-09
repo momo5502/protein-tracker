@@ -413,7 +413,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: colorScheme.surfaceVariant,
+                  color: colorScheme.surfaceContainerHighest,
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
                       color: colorScheme.outline.withValues(alpha: 0.5)),
@@ -664,7 +664,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         padding: const EdgeInsets.all(24),
                         decoration: BoxDecoration(
                           color: Theme.of(context).brightness == Brightness.dark
-                              ? colorScheme.surfaceVariant
+                              ? colorScheme.surfaceContainerHighest
                               : Color.lerp(
                                   colorScheme.surface, Colors.white, 0.7),
                           borderRadius: BorderRadius.circular(16),
@@ -821,7 +821,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                             decoration: BoxDecoration(
                               color: Theme.of(context).brightness ==
                                       Brightness.dark
-                                  ? colorScheme.surfaceVariant
+                                  ? colorScheme.surfaceContainerHighest
                                   : Color.lerp(
                                       colorScheme.surface, Colors.white, 0.7),
                               borderRadius: BorderRadius.circular(12),
@@ -1736,7 +1736,7 @@ class HistoryPage extends StatelessWidget {
                 return Container(
                   decoration: BoxDecoration(
                     color: Theme.of(context).brightness == Brightness.dark
-                        ? colorScheme.surfaceVariant
+                        ? colorScheme.surfaceContainerHighest
                         : Color.lerp(colorScheme.surface, Colors.white, 0.7),
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: [
