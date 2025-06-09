@@ -1551,31 +1551,31 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
                     value: 'system',
                     child: Text(l10n.systemDefault),
                   ),
-                  DropdownMenuItem(
+                  const DropdownMenuItem(
                     value: 'en',
                     child: Text('English'),
                   ),
-                  DropdownMenuItem(
+                  const DropdownMenuItem(
                     value: 'de',
                     child: Text('Deutsch'),
                   ),
-                  DropdownMenuItem(
+                  const DropdownMenuItem(
                     value: 'fr',
                     child: Text('Français'),
                   ),
-                  DropdownMenuItem(
+                  const DropdownMenuItem(
                     value: 'es',
                     child: Text('Español'),
                   ),
-                  DropdownMenuItem(
+                  const DropdownMenuItem(
                     value: 'it',
                     child: Text('Italiano'),
                   ),
-                  DropdownMenuItem(
+                  const DropdownMenuItem(
                     value: 'pt',
                     child: Text('Português'),
                   ),
-                  DropdownMenuItem(
+                  const DropdownMenuItem(
                     value: 'ja',
                     child: Text('日本語'),
                   ),
