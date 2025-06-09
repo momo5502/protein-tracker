@@ -1,0 +1,35 @@
+name: Build Flutter App
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2.19.0
+      with:
+        flutter-version: '3.32.0'
+        channel: 'stable'
+    
+    - name: Install dependencies
+      run: flutter pub get
+
+    - name: Update translations
+      run: flutter gen-l10n
+
+    - name: Build APK
+      run: flutter build apk --release
+    
+    - name: Upload APK
+      uses: actions/upload-artifact@v4
+      with:
+        name: release-apk
+        path: build/app/outputs/flutter-apk/app-release.apk 
