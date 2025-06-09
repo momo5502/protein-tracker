@@ -374,6 +374,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   void _deleteProteinEntry(ProteinEntry entry) {
     final l10n = AppLocalizations.of(context)!;
+    final colorScheme = Theme.of(context).colorScheme;
+
     showDialog(
       context: context,
       builder: (context) => Dialog(
@@ -382,6 +384,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         ),
         child: Container(
           padding: const EdgeInsets.all(24),
+          decoration: BoxDecoration(
+            color: colorScheme.surface,
+            borderRadius: BorderRadius.circular(20),
+          ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -391,14 +397,15 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 children: [
                   Text(
                     l10n.deleteEntry,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
+                      color: colorScheme.onSurface,
                     ),
                   ),
                   IconButton(
                     onPressed: () => Navigator.pop(context),
-                    icon: const Icon(Icons.close),
+                    icon: Icon(Icons.close, color: colorScheme.onSurface),
                   ),
                 ],
               ),
@@ -406,9 +413,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Colors.grey[50],
+                  color: colorScheme.surfaceVariant,
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.grey[300]!),
+                  border:
+                      Border.all(color: colorScheme.outline.withOpacity(0.5)),
                 ),
                 child: Row(
                   children: [
@@ -434,10 +442,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     Expanded(
                       child: Text(
                         entry.source.isEmpty ? l10n.entry : entry.source,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
-                          color: Colors.black87,
+                          color: colorScheme.onSurface,
                         ),
                       ),
                     ),
@@ -458,9 +466,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       ),
                       child: Text(
                         l10n.cancel,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
+                          color: colorScheme.onSurface,
                         ),
                       ),
                     ),
@@ -797,7 +806,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           child: Container(
                             padding: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
-                              color: colorScheme.surface,
+                              color: colorScheme.surfaceVariant,
                               borderRadius: BorderRadius.circular(12),
                               boxShadow: [
                                 BoxShadow(
@@ -830,14 +839,14 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                         style: TextStyle(
                                           fontWeight: FontWeight.w600,
                                           fontSize: 16,
-                                          color: colorScheme.onSurface,
+                                          color: colorScheme.onSurfaceVariant,
                                         ),
                                       ),
                                       Text(
                                         DateFormat('h:mm a')
                                             .format(entry.timestamp),
                                         style: TextStyle(
-                                          color: colorScheme.onSurface
+                                          color: colorScheme.onSurfaceVariant
                                               .withOpacity(0.6),
                                           fontSize: 14,
                                         ),
@@ -1311,12 +1320,18 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
       ),
       child: Container(
         padding: const EdgeInsets.all(24),
+        decoration: BoxDecoration(
+          color: colorScheme.surface,
+          borderRadius: BorderRadius.circular(20),
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -1326,46 +1341,62 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
               children: [
                 Text(
                   l10n.settings,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
+                    color: colorScheme.onSurface,
                   ),
                 ),
                 IconButton(
                   onPressed: () => Navigator.pop(context),
-                  icon: const Icon(Icons.close),
+                  icon: Icon(Icons.close, color: colorScheme.onSurface),
                 ),
               ],
             ),
             const SizedBox(height: 24),
             Text(
               l10n.dailyProteinGoal,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
-                color: Colors.black87,
+                color: colorScheme.onSurface,
               ),
             ),
             const SizedBox(height: 12),
             TextField(
               controller: _controller,
+              style: TextStyle(color: colorScheme.onSurface),
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 hintText: l10n.proteinAmountHint,
+                hintStyle:
+                    TextStyle(color: colorScheme.onSurface.withOpacity(0.5)),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
-                prefixIcon: const Icon(Icons.fitness_center),
+                prefixIcon: Icon(Icons.fitness_center,
+                    color: colorScheme.onSurface.withOpacity(0.7)),
                 suffixText: 'g',
+                suffixStyle:
+                    TextStyle(color: colorScheme.onSurface.withOpacity(0.7)),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide:
+                      BorderSide(color: colorScheme.outline.withOpacity(0.5)),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: AppColors.primary),
+                ),
               ),
             ),
             const SizedBox(height: 24),
-            const Text(
+            Text(
               'App Color',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
-                color: Colors.black87,
+                color: colorScheme.onSurface,
               ),
             ),
             const SizedBox(height: 12),
@@ -1374,9 +1405,10 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
               child: Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Colors.grey[50],
+                  color: colorScheme.surfaceVariant,
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.grey[300]!),
+                  border:
+                      Border.all(color: colorScheme.outline.withOpacity(0.5)),
                 ),
                 child: Row(
                   children: [
@@ -1386,15 +1418,16 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
                       decoration: BoxDecoration(
                         color: _selectedColor,
                         shape: BoxShape.circle,
-                        border: Border.all(color: Colors.grey[300]!),
+                        border: Border.all(
+                            color: colorScheme.outline.withOpacity(0.5)),
                       ),
                     ),
                     const SizedBox(width: 16),
-                    const Text(
+                    Text(
                       'Tap to change color',
                       style: TextStyle(
                         fontSize: 16,
-                        color: Colors.black87,
+                        color: colorScheme.onSurfaceVariant,
                       ),
                     ),
                   ],
@@ -1402,25 +1435,28 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
               ),
             ),
             const SizedBox(height: 24),
-            const Text(
+            Text(
               'Language',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
-                color: Colors.black87,
+                color: colorScheme.onSurface,
               ),
             ),
             const SizedBox(height: 12),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12),
               decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey.shade300),
+                color: colorScheme.surfaceVariant,
+                border: Border.all(color: colorScheme.outline.withOpacity(0.5)),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: DropdownButton<String>(
                 value: _selectedLanguage,
                 isExpanded: true,
                 underline: const SizedBox(),
+                dropdownColor: colorScheme.surfaceVariant,
+                style: TextStyle(color: colorScheme.onSurfaceVariant),
                 items: const [
                   DropdownMenuItem(
                     value: 'system',
@@ -1468,25 +1504,28 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
               ),
             ),
             const SizedBox(height: 24),
-            const Text(
+            Text(
               'Theme',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
-                color: Colors.black87,
+                color: colorScheme.onSurface,
               ),
             ),
             const SizedBox(height: 12),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12),
               decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey.shade300),
+                color: colorScheme.surfaceVariant,
+                border: Border.all(color: colorScheme.outline.withOpacity(0.5)),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: DropdownButton<ThemeMode>(
                 value: _selectedThemeMode,
                 isExpanded: true,
                 underline: const SizedBox(),
+                dropdownColor: colorScheme.surfaceVariant,
+                style: TextStyle(color: colorScheme.onSurfaceVariant),
                 items: const [
                   DropdownMenuItem(
                     value: ThemeMode.system,
@@ -1523,9 +1562,10 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
                     ),
                     child: Text(
                       l10n.cancel,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
+                        color: colorScheme.onSurface,
                       ),
                     ),
                   ),
