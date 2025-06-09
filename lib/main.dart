@@ -806,7 +806,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           child: Container(
                             padding: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
-                              color: colorScheme.surfaceVariant,
+                              color: Theme.of(context).brightness ==
+                                      Brightness.dark
+                                  ? colorScheme.surfaceVariant
+                                  : Color.lerp(
+                                      colorScheme.surface, Colors.white, 0.7),
                               borderRadius: BorderRadius.circular(12),
                               boxShadow: [
                                 BoxShadow(
@@ -839,15 +843,22 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                         style: TextStyle(
                                           fontWeight: FontWeight.w600,
                                           fontSize: 16,
-                                          color: colorScheme.onSurfaceVariant,
+                                          color: Theme.of(context).brightness ==
+                                                  Brightness.dark
+                                              ? colorScheme.onSurfaceVariant
+                                              : colorScheme.onSurface,
                                         ),
                                       ),
                                       Text(
                                         DateFormat('h:mm a')
                                             .format(entry.timestamp),
                                         style: TextStyle(
-                                          color: colorScheme.onSurfaceVariant
-                                              .withOpacity(0.6),
+                                          color: Theme.of(context).brightness ==
+                                                  Brightness.dark
+                                              ? colorScheme.onSurfaceVariant
+                                                  .withOpacity(0.6)
+                                              : colorScheme.onSurface
+                                                  .withOpacity(0.6),
                                           fontSize: 14,
                                         ),
                                       ),
@@ -1622,6 +1633,7 @@ class HistoryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final colorScheme = Theme.of(context).colorScheme;
     final sortedDates = _dailyTotals.keys.toList()
       ..sort((a, b) => b.compareTo(a));
 
@@ -1647,8 +1659,20 @@ class HistoryPage extends StatelessWidget {
                 final isToday =
                     DateFormat('yyyy-MM-dd').format(DateTime.now()) == date;
 
-                return Card(
-                  margin: const EdgeInsets.only(bottom: 12),
+                return Container(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? colorScheme.surfaceVariant
+                        : Color.lerp(colorScheme.surface, Colors.white, 0.7),
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(
+                        color: colorScheme.shadow.withOpacity(0.05),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
                   child: ListTile(
                     title: Text(
                       isToday
