@@ -3,6 +3,9 @@
         android:label="Protein Tracker"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-6021244053292554~4869838201"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"

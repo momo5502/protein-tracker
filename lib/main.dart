@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'dart:convert';
 import 'dart:math' as math;
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 // Custom color scheme class
 class AppColors {
@@ -37,6 +38,8 @@ class AppColors {
 }
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  MobileAds.instance.initialize();
   runApp(const ProteinTrackerApp());
 }
 
@@ -221,6 +224,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   double _dailyGoal = 100.0; // Default 100g protein
   late AnimationController _progressAnimationController;
   late Animation<double> _progressAnimation;
+  BannerAd? _bannerAd;
+  bool _isBannerAdReady = false;
+  bool _adsEnabled = true;
 
   @override
   void initState() {
@@ -236,12 +242,61 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       ),
     );
     _loadData();
+    _loadAdPreference();
   }
 
   @override
   void dispose() {
+    _bannerAd?.dispose();
     _progressAnimationController.dispose();
     super.dispose();
+  }
+
+  Future<void> _loadAdPreference() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _adsEnabled = prefs.getBool('ads_enabled') ?? true;
+    });
+    if (_adsEnabled) {
+      _loadBannerAd();
+    }
+  }
+
+  Future<void> _setAdPreference(bool enabled) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('ads_enabled', enabled);
+    setState(() {
+      _adsEnabled = enabled;
+    });
+    if (enabled) {
+      _loadBannerAd();
+    } else {
+      _bannerAd?.dispose();
+      _bannerAd = null;
+      _isBannerAdReady = false;
+    }
+  }
+
+  void _loadBannerAd() {
+    _bannerAd = BannerAd(
+      adUnitId:
+          'ca-app-pub-6021244053292554/9757867645', // Production ad unit ID
+      size: AdSize.banner,
+      request: const AdRequest(),
+      listener: BannerAdListener(
+        onAdLoaded: (_) {
+          setState(() {
+            _isBannerAdReady = true;
+          });
+        },
+        onAdFailedToLoad: (ad, err) {
+          _isBannerAdReady = false;
+          ad.dispose();
+        },
+      ),
+    );
+
+    _bannerAd?.load();
   }
 
   Future<void> _loadData() async {
@@ -333,6 +388,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         onThemeModeChanged: widget.onThemeModeChanged,
         currentLocale: widget.currentLocale,
         currentThemeMode: widget.currentThemeMode,
+        onAdPreferenceChanged: _setAdPreference,
+        adsEnabled: _adsEnabled,
       ),
     );
   }
@@ -585,368 +642,392 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(20),
+          Expanded(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(24),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Color.lerp(Colors.white, _progressColor, 0.8)!,
-                        _progressColor,
-                        Color.lerp(Colors.black, _progressColor, 0.8)!
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        color: _progressColor.withValues(alpha: 0.3),
-                        blurRadius: 15,
-                        offset: const Offset(0, 8),
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(24),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              Color.lerp(Colors.white, _progressColor, 0.8)!,
+                              _progressColor,
+                              Color.lerp(Colors.black, _progressColor, 0.8)!
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              color: _progressColor.withValues(alpha: 0.3),
+                              blurRadius: 15,
+                              offset: const Offset(0, 8),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          children: [
+                            Text(
+                              l10n.todayProgress,
+                              style: TextStyle(
+                                color: Colors.white.withValues(alpha: 0.9),
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                            AnimatedBuilder(
+                              animation: _progressAnimation,
+                              builder: (context, child) {
+                                return CustomPaint(
+                                  size: const Size(150, 150),
+                                  painter: CircularProgressPainter(
+                                    progress: _progressAnimation.value *
+                                        _progressPercentage,
+                                    strokeWidth: 12,
+                                    backgroundColor:
+                                        Colors.white.withValues(alpha: 0.2),
+                                    progressColor: Colors.white,
+                                  ),
+                                  child: SizedBox(
+                                    width: 150,
+                                    height: 150,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          '${(_progressAnimation.value * _todayTotal).toInt()}g',
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 28,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Text(
+                                          '${l10n.progressOf} ${_dailyGoal.toInt()}g',
+                                          style: TextStyle(
+                                            color: Colors.white
+                                                .withValues(alpha: 0.8),
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                            const SizedBox(height: 16),
+                            Text(
+                              '${(_progressPercentage * 100).toInt()}% ${l10n.complete}',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 32),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            l10n.todayEntries,
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              color: colorScheme.onSurface,
+                            ),
+                          ),
+                          TextButton.icon(
+                            onPressed: _addProteinEntry,
+                            icon: const Icon(Icons.add),
+                            label: Text(l10n.add),
+                            style: TextButton.styleFrom(
+                              foregroundColor: AppColors.primary,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                  child: Column(
-                    children: [
-                      Text(
-                        l10n.todayProgress,
-                        style: TextStyle(
-                          color: Colors.white.withValues(alpha: 0.9),
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      AnimatedBuilder(
-                        animation: _progressAnimation,
-                        builder: (context, child) {
-                          return CustomPaint(
-                            size: const Size(150, 150),
-                            painter: CircularProgressPainter(
-                              progress: _progressAnimation.value *
-                                  _progressPercentage,
-                              strokeWidth: 12,
-                              backgroundColor:
-                                  Colors.white.withValues(alpha: 0.2),
-                              progressColor: Colors.white,
-                            ),
-                            child: SizedBox(
-                              width: 150,
-                              height: 150,
+                ),
+                Expanded(
+                  child: _todayEntries.isEmpty
+                      ? Padding(
+                          padding: const EdgeInsets.only(top: 20),
+                          child: Align(
+                            alignment: Alignment.topCenter,
+                            child: Container(
+                              width: double.infinity,
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 20),
+                              padding: const EdgeInsets.all(24),
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).brightness ==
+                                        Brightness.dark
+                                    ? colorScheme.surfaceVariant
+                                    : Color.lerp(
+                                        colorScheme.surface, Colors.white, 0.7),
+                                borderRadius: BorderRadius.circular(16),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: colorScheme.shadow
+                                        .withValues(alpha: 0.05),
+                                    blurRadius: 10,
+                                    offset: const Offset(0, 4),
+                                  ),
+                                ],
+                              ),
                               child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
+                                  Icon(
+                                    Icons.restaurant_menu,
+                                    size: 48,
+                                    color: colorScheme.onSurface
+                                        .withValues(alpha: 0.4),
+                                  ),
+                                  const SizedBox(height: 16),
                                   Text(
-                                    '${(_progressAnimation.value * _todayTotal).toInt()}g',
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 28,
-                                      fontWeight: FontWeight.bold,
+                                    l10n.noEntriesToday,
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w600,
+                                      color: colorScheme.onSurface
+                                          .withValues(alpha: 0.6),
                                     ),
                                   ),
+                                  const SizedBox(height: 8),
                                   Text(
-                                    '${l10n.progressOf} ${_dailyGoal.toInt()}g',
+                                    l10n.startTracking,
                                     style: TextStyle(
-                                      color:
-                                          Colors.white.withValues(alpha: 0.8),
                                       fontSize: 14,
+                                      color: colorScheme.onSurface
+                                          .withValues(alpha: 0.5),
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                          );
-                        },
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        '${(_progressPercentage * 100).toInt()}% ${l10n.complete}',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 32),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      l10n.todayEntries,
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: colorScheme.onSurface,
-                      ),
-                    ),
-                    TextButton.icon(
-                      onPressed: _addProteinEntry,
-                      icon: const Icon(Icons.add),
-                      label: Text(l10n.add),
-                      style: TextButton.styleFrom(
-                        foregroundColor: AppColors.primary,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: _todayEntries.isEmpty
-                ? Padding(
-                    padding: const EdgeInsets.only(top: 20),
-                    child: Align(
-                      alignment: Alignment.topCenter,
-                      child: Container(
-                        width: double.infinity,
-                        margin: const EdgeInsets.symmetric(horizontal: 20),
-                        padding: const EdgeInsets.all(24),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).brightness == Brightness.dark
-                              ? colorScheme.surfaceVariant
-                              : Color.lerp(
-                                  colorScheme.surface, Colors.white, 0.7),
-                          borderRadius: BorderRadius.circular(16),
-                          boxShadow: [
-                            BoxShadow(
-                              color: colorScheme.shadow.withValues(alpha: 0.05),
-                              blurRadius: 10,
-                              offset: const Offset(0, 4),
-                            ),
-                          ],
-                        ),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.restaurant_menu,
-                              size: 48,
-                              color:
-                                  colorScheme.onSurface.withValues(alpha: 0.4),
-                            ),
-                            const SizedBox(height: 16),
-                            Text(
-                              l10n.noEntriesToday,
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600,
-                                color: colorScheme.onSurface
-                                    .withValues(alpha: 0.6),
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              l10n.startTracking,
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: colorScheme.onSurface
-                                    .withValues(alpha: 0.5),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  )
-                : ListView.builder(
-                    padding: const EdgeInsets.all(16),
-                    itemCount: _todayEntries.length,
-                    itemBuilder: (context, index) {
-                      final entry = _todayEntries[index];
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 16),
-                        child: GestureDetector(
-                          onLongPress: () {
-                            HapticFeedback.mediumImpact();
-                            final l10n = AppLocalizations.of(context)!;
-                            showModalBottomSheet(
-                              context: context,
-                              backgroundColor: Colors.transparent,
-                              builder: (context) => Container(
-                                padding: const EdgeInsets.all(24),
-                                decoration: BoxDecoration(
-                                  color: colorScheme.surface,
-                                  borderRadius: const BorderRadius.vertical(
-                                      top: Radius.circular(20)),
-                                ),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          l10n.editEntry,
-                                          style: TextStyle(
-                                            fontSize: 24,
-                                            fontWeight: FontWeight.bold,
-                                            color: colorScheme.onSurface,
+                          ),
+                        )
+                      : ListView.builder(
+                          padding: const EdgeInsets.all(16),
+                          itemCount: _todayEntries.length,
+                          itemBuilder: (context, index) {
+                            final entry = _todayEntries[index];
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 16),
+                              child: GestureDetector(
+                                onLongPress: () {
+                                  HapticFeedback.mediumImpact();
+                                  final l10n = AppLocalizations.of(context)!;
+                                  showModalBottomSheet(
+                                    context: context,
+                                    backgroundColor: Colors.transparent,
+                                    builder: (context) => Container(
+                                      padding: const EdgeInsets.all(24),
+                                      decoration: BoxDecoration(
+                                        color: colorScheme.surface,
+                                        borderRadius:
+                                            const BorderRadius.vertical(
+                                                top: Radius.circular(20)),
+                                      ),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                l10n.editEntry,
+                                                style: TextStyle(
+                                                  fontSize: 24,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: colorScheme.onSurface,
+                                                ),
+                                              ),
+                                              IconButton(
+                                                onPressed: () =>
+                                                    Navigator.pop(context),
+                                                icon: const Icon(Icons.close),
+                                              ),
+                                            ],
                                           ),
-                                        ),
-                                        IconButton(
-                                          onPressed: () =>
-                                              Navigator.pop(context),
-                                          icon: const Icon(Icons.close),
-                                        ),
-                                      ],
+                                          const SizedBox(height: 24),
+                                          ListTile(
+                                            contentPadding: EdgeInsets.zero,
+                                            leading: Container(
+                                              padding: const EdgeInsets.all(8),
+                                              decoration: BoxDecoration(
+                                                color: AppColors.primaryLight,
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                              ),
+                                              child: Icon(
+                                                Icons.edit,
+                                                color: AppColors.primary,
+                                              ),
+                                            ),
+                                            title: Text(
+                                              l10n.edit,
+                                              style: TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.w500,
+                                                color: colorScheme.onSurface,
+                                              ),
+                                            ),
+                                            onTap: () {
+                                              HapticFeedback.mediumImpact();
+                                              Navigator.pop(context);
+                                              _editProteinEntry(entry);
+                                            },
+                                          ),
+                                          const SizedBox(height: 16),
+                                          ListTile(
+                                            contentPadding: EdgeInsets.zero,
+                                            leading: Container(
+                                              padding: const EdgeInsets.all(8),
+                                              decoration: BoxDecoration(
+                                                color: Colors.red
+                                                    .withValues(alpha: 0.1),
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                              ),
+                                              child: const Icon(
+                                                Icons.delete,
+                                                color: Colors.red,
+                                              ),
+                                            ),
+                                            title: Text(
+                                              l10n.delete,
+                                              style: const TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.w500,
+                                                color: Colors.red,
+                                              ),
+                                            ),
+                                            onTap: () {
+                                              HapticFeedback.heavyImpact();
+                                              Navigator.pop(context);
+                                              _deleteProteinEntry(entry);
+                                            },
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                    const SizedBox(height: 24),
-                                    ListTile(
-                                      contentPadding: EdgeInsets.zero,
-                                      leading: Container(
-                                        padding: const EdgeInsets.all(8),
-                                        decoration: BoxDecoration(
-                                          color: AppColors.primaryLight,
-                                          borderRadius:
-                                              BorderRadius.circular(8),
-                                        ),
-                                        child: Icon(
-                                          Icons.edit,
-                                          color: AppColors.primary,
-                                        ),
-                                      ),
-                                      title: Text(
-                                        l10n.edit,
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w500,
-                                          color: colorScheme.onSurface,
-                                        ),
-                                      ),
-                                      onTap: () {
-                                        HapticFeedback.mediumImpact();
-                                        Navigator.pop(context);
-                                        _editProteinEntry(entry);
-                                      },
-                                    ),
-                                    const SizedBox(height: 16),
-                                    ListTile(
-                                      contentPadding: EdgeInsets.zero,
-                                      leading: Container(
-                                        padding: const EdgeInsets.all(8),
-                                        decoration: BoxDecoration(
-                                          color:
-                                              Colors.red.withValues(alpha: 0.1),
-                                          borderRadius:
-                                              BorderRadius.circular(8),
-                                        ),
-                                        child: const Icon(
-                                          Icons.delete,
-                                          color: Colors.red,
-                                        ),
-                                      ),
-                                      title: Text(
-                                        l10n.delete,
-                                        style: const TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w500,
-                                          color: Colors.red,
-                                        ),
-                                      ),
-                                      onTap: () {
-                                        HapticFeedback.heavyImpact();
-                                        Navigator.pop(context);
-                                        _deleteProteinEntry(entry);
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.all(16),
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).brightness ==
-                                      Brightness.dark
-                                  ? colorScheme.surfaceVariant
-                                  : Color.lerp(
-                                      colorScheme.surface, Colors.white, 0.7),
-                              borderRadius: BorderRadius.circular(12),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: colorScheme.shadow
-                                      .withValues(alpha: 0.05),
-                                  blurRadius: 8,
-                                  offset: const Offset(0, 2),
-                                ),
-                              ],
-                            ),
-                            child: Row(
-                              children: [
-                                Container(
-                                  width: 12,
-                                  height: 12,
+                                  );
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.all(16),
                                   decoration: BoxDecoration(
-                                    color: AppColors.primary,
-                                    borderRadius: BorderRadius.circular(6),
+                                    color: Theme.of(context).brightness ==
+                                            Brightness.dark
+                                        ? colorScheme.surfaceVariant
+                                        : Color.lerp(colorScheme.surface,
+                                            Colors.white, 0.7),
+                                    borderRadius: BorderRadius.circular(12),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: colorScheme.shadow
+                                            .withValues(alpha: 0.05),
+                                        blurRadius: 8,
+                                        offset: const Offset(0, 2),
+                                      ),
+                                    ],
                                   ),
-                                ),
-                                const SizedBox(width: 16),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                  child: Row(
                                     children: [
-                                      Text(
-                                        entry.source.isEmpty
-                                            ? l10n.entry
-                                            : entry.source,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 16,
-                                          color: Theme.of(context).brightness ==
-                                                  Brightness.dark
-                                              ? colorScheme.onSurfaceVariant
-                                              : colorScheme.onSurface,
-                                          overflow: TextOverflow.ellipsis,
+                                      Container(
+                                        width: 12,
+                                        height: 12,
+                                        decoration: BoxDecoration(
+                                          color: AppColors.primary,
+                                          borderRadius:
+                                              BorderRadius.circular(6),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 16),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              entry.source.isEmpty
+                                                  ? l10n.entry
+                                                  : entry.source,
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 16,
+                                                color: Theme.of(context)
+                                                            .brightness ==
+                                                        Brightness.dark
+                                                    ? colorScheme
+                                                        .onSurfaceVariant
+                                                    : colorScheme.onSurface,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ),
+                                            Text(
+                                              DateFormat('h:mm a')
+                                                  .format(entry.timestamp),
+                                              style: TextStyle(
+                                                color: Theme.of(context)
+                                                            .brightness ==
+                                                        Brightness.dark
+                                                    ? colorScheme
+                                                        .onSurfaceVariant
+                                                        .withValues(alpha: 0.6)
+                                                    : colorScheme.onSurface
+                                                        .withValues(alpha: 0.6),
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
                                       Text(
-                                        DateFormat('h:mm a')
-                                            .format(entry.timestamp),
+                                        '${entry.amount}g',
                                         style: TextStyle(
-                                          color: Theme.of(context).brightness ==
-                                                  Brightness.dark
-                                              ? colorScheme.onSurfaceVariant
-                                                  .withValues(alpha: 0.6)
-                                              : colorScheme.onSurface
-                                                  .withValues(alpha: 0.6),
-                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18,
+                                          color: AppColors.primary,
                                         ),
                                       ),
                                     ],
                                   ),
                                 ),
-                                Text(
-                                  '${entry.amount}g',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18,
-                                    color: AppColors.primary,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                              ),
+                            );
+                          },
                         ),
-                      );
-                    },
-                  ),
+                ),
+              ],
+            ),
           ),
+          if (_isBannerAdReady && _adsEnabled)
+            Container(
+              width: _bannerAd!.size.width.toDouble(),
+              height: _bannerAd!.size.height.toDouble(),
+              alignment: Alignment.center,
+              child: AdWidget(ad: _bannerAd!),
+            ),
         ],
       ),
     );
@@ -1516,6 +1597,8 @@ class SetGoalDialog extends StatefulWidget {
   final Function(Locale?) onLocaleChanged;
   final Function(Color) onColorChanged;
   final Function(ThemeMode) onThemeModeChanged;
+  final Function(bool) onAdPreferenceChanged;
+  final bool adsEnabled;
   final Locale? currentLocale;
   final ThemeMode currentThemeMode;
 
@@ -1526,6 +1609,8 @@ class SetGoalDialog extends StatefulWidget {
     required this.onLocaleChanged,
     required this.onColorChanged,
     required this.onThemeModeChanged,
+    required this.onAdPreferenceChanged,
+    required this.adsEnabled,
     required this.currentLocale,
     required this.currentThemeMode,
   });
@@ -1539,6 +1624,7 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
   late String _selectedLanguage;
   Color _selectedColor = AppColors.primary;
   ThemeMode _selectedThemeMode = ThemeMode.system;
+  bool _showDeveloperOptions = false;
 
   // Store original values
   late double _originalGoal;
@@ -1729,12 +1815,20 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  l10n.settings,
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: colorScheme.onSurface,
+                GestureDetector(
+                  onLongPress: () {
+                    HapticFeedback.heavyImpact();
+                    setState(() {
+                      _showDeveloperOptions = !_showDeveloperOptions;
+                    });
+                  },
+                  child: Text(
+                    l10n.settings,
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: colorScheme.onSurface,
+                    ),
                   ),
                 ),
                 IconButton(
@@ -1965,6 +2059,31 @@ class _SetGoalDialogState extends State<SetGoalDialog> {
                         },
                       ),
                     ),
+                    if (_showDeveloperOptions) ...[
+                      const SizedBox(height: 24),
+                      Text(
+                        'Developer Options',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: colorScheme.onSurface,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      SwitchListTile(
+                        title: Text(
+                          'Enable Ads',
+                          style: TextStyle(
+                            color: colorScheme.onSurface,
+                          ),
+                        ),
+                        value: widget.adsEnabled,
+                        onChanged: (value) {
+                          HapticFeedback.mediumImpact();
+                          widget.onAdPreferenceChanged(value);
+                        },
+                      ),
+                    ],
                   ],
                 ),
               ),
