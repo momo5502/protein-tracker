@@ -35,5 +35,10 @@
   "noRecipes": "No hay recetas disponibles",
   "addRecipe": "Añadir Receta",
   "recipeName": "Nombre de la Receta",
-  "recipeNameHint": "ej. Pechuga de Pollo con Arroz"
+  "recipeNameHint": "ej. Pechuga de Pollo con Arroz",
+  "today": "Hoy",
+  "dailyGoal": "Objetivo Diario",
+  "dailyGoalHint": "Ingresa el objetivo diario",
+  "noEntries": "Aún no hay entradas",
+  "recentEntries": "Entradas Recientes"
 } 

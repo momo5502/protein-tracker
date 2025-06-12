@@ -35,5 +35,10 @@
   "noRecipes": "Nenhuma receita disponível",
   "addRecipe": "Adicionar Receita",
   "recipeName": "Nome da Receita",
-  "recipeNameHint": "ex. Peito de Frango com Arroz"
+  "recipeNameHint": "ex. Peito de Frango com Arroz",
+  "today": "Hoje",
+  "dailyGoal": "Meta Diária",
+  "dailyGoalHint": "Digite a meta diária",
+  "noEntries": "Nenhuma entrada ainda",
+  "recentEntries": "Entradas Recentes"
 } 

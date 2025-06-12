@@ -30,7 +30,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get noEntriesToday => '今日の記録はありません';
 
   @override
-  String get startTracking => '最初の記録を追加しましょう';
+  String get startTracking => '最初の記録を追加してください';
 
   @override
   String get editEntry => '記録を編集';
@@ -87,16 +87,16 @@ class AppLocalizationsJa extends AppLocalizations {
   String get noHistory => '履歴がありません';
 
   @override
-  String get today => 'Today';
+  String get today => '今日';
 
   @override
   String get dailyGoal => '1日の目標';
 
   @override
-  String get dailyGoalHint => '目標を入力';
+  String get dailyGoalHint => '1日の目標を入力';
 
   @override
-  String get noEntries => 'エントリーなし';
+  String get noEntries => 'まだ記録がありません';
 
   @override
   String get appColor => 'アプリの色';

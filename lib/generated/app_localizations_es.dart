@@ -51,7 +51,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get addProtein => 'Añadir Proteína';
 
   @override
-  String get recentEntries => 'Recent Entries';
+  String get recentEntries => 'Entradas Recientes';
 
   @override
   String get proteinSource => 'Fuente de Proteína';
@@ -87,16 +87,16 @@ class AppLocalizationsEs extends AppLocalizations {
   String get noHistory => 'No hay historial disponible';
 
   @override
-  String get today => 'Today';
+  String get today => 'Hoy';
 
   @override
-  String get dailyGoal => 'Daily Goal';
+  String get dailyGoal => 'Objetivo Diario';
 
   @override
-  String get dailyGoalHint => 'Enter daily goal';
+  String get dailyGoalHint => 'Ingresa el objetivo diario';
 
   @override
-  String get noEntries => 'No entries yet';
+  String get noEntries => 'Aún no hay entradas';
 
   @override
   String get appColor => 'Color de la Aplicación';

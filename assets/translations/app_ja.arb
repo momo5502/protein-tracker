@@ -13,7 +13,7 @@
   "proteinAmountHint": "例：30",
   "entry": "記録",
   "noEntriesToday": "今日の記録はありません",
-  "startTracking": "最初の記録を追加しましょう",
+  "startTracking": "最初の記録を追加してください",
   "history": "履歴",
   "noHistory": "履歴がありません",
   "settings": "設定",
@@ -36,8 +36,9 @@
   "addRecipe": "レシピを追加",
   "recipeName": "レシピ名",
   "recipeNameHint": "例：鶏むね肉とご飯",
-  "recentEntries": "最近の記録",
+  "today": "今日",
   "dailyGoal": "1日の目標",
-  "dailyGoalHint": "目標を入力",
-  "noEntries": "エントリーなし"
+  "dailyGoalHint": "1日の目標を入力",
+  "noEntries": "まだ記録がありません",
+  "recentEntries": "最近の記録"
 } 

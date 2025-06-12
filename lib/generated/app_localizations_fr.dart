@@ -27,7 +27,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get add => 'Ajouter';
 
   @override
-  String get noEntriesToday => 'Aucune entrée aujourd\'hui';
+  String get noEntriesToday => 'Pas d\'entrées aujourd\'hui';
 
   @override
   String get startTracking => 'Ajoutez votre première entrée';
@@ -51,7 +51,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get addProtein => 'Ajouter des Protéines';
 
   @override
-  String get recentEntries => 'Recent Entries';
+  String get recentEntries => 'Entrées Récentes';
 
   @override
   String get proteinSource => 'Source de Protéines';
@@ -72,7 +72,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get settings => 'Paramètres';
 
   @override
-  String get dailyProteinGoal => 'Objectif Protéines Quotidien';
+  String get dailyProteinGoal => 'Objectif Quotidien de Protéines';
 
   @override
   String get cancel => 'Annuler';
@@ -84,19 +84,19 @@ class AppLocalizationsFr extends AppLocalizations {
   String get history => 'Historique';
 
   @override
-  String get noHistory => 'Aucun historique disponible';
+  String get noHistory => 'Pas d\'historique disponible';
 
   @override
-  String get today => 'Today';
+  String get today => 'Aujourd\'hui';
 
   @override
-  String get dailyGoal => 'Daily Goal';
+  String get dailyGoal => 'Objectif Quotidien';
 
   @override
-  String get dailyGoalHint => 'Enter daily goal';
+  String get dailyGoalHint => 'Entrez l\'objectif quotidien';
 
   @override
-  String get noEntries => 'No entries yet';
+  String get noEntries => 'Pas encore d\'entrées';
 
   @override
   String get appColor => 'Couleur de l\'Application';
@@ -123,7 +123,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get recipeList => 'Liste des Recettes';
 
   @override
-  String get noRecipes => 'Aucune recette disponible';
+  String get noRecipes => 'Pas de recettes disponibles';
 
   @override
   String get addRecipe => 'Ajouter une Recette';
