@@ -51,13 +51,13 @@ jobs:
       run: flutter build appbundle --release
 
     - name: Upload APK
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       with:
         name: release-apk
         path: build/app/outputs/flutter-apk/app-release.apk
 
     - name: Upload App Bundle
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       with:
         name: release-bundle
         path: build/app/outputs/bundle/release/app-release.aab
