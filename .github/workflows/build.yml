@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [ main ]
 
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -16,7 +20,6 @@ jobs:
     - name: Setup Flutter
       uses: subosito/flutter-action@v2.21.0
       with:
-        flutter-version: '3.32.0'
         channel: 'stable'
     
     - name: Install dependencies
@@ -31,13 +34,19 @@ jobs:
         distribution: 'zulu'
         java-version: '17'
 
+    - name: Build debug APK
+      if: github.ref != 'refs/heads/main' || github.event_name != 'push'
+      run: flutter build apk --debug
+
     - name: Decode Keystore
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
       env:
         KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
       run: |
         echo $KEYSTORE_BASE64 | base64 -d > android/upload-keystore.jks
 
     - name: Create key.properties
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
       run: |
         echo "storeFile=upload-keystore.jks" >> android/key.properties
         echo "storePassword=${{ secrets.KEYSTORE_PASSWORD }}" >> android/key.properties
@@ -45,19 +54,25 @@ jobs:
         echo "keyPassword=${{ secrets.KEY_PASSWORD }}" >> android/key.properties
 
     - name: Build APK
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
       run: flutter build apk --release
 
     - name: Build App Bundle
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
       run: flutter build appbundle --release
 
     - name: Upload APK
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
       uses: actions/upload-artifact@v6
       with:
         name: release-apk
         path: build/app/outputs/flutter-apk/app-release.apk
+        retention-days: 5
 
     - name: Upload App Bundle
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
       uses: actions/upload-artifact@v6
       with:
         name: release-bundle
         path: build/app/outputs/bundle/release/app-release.aab
+        retention-days: 5
